@@ -27,10 +27,11 @@ install:
 
 build_script:
   - set npm_config_msvs_version=2015
+  - set npm_config_build_from_source=true
   - yarn --frozen-lockfile
 
 test_script:
-  - node --expose-gc node_modules/nodeunit/bin/nodeunit test
+  - yarn test
 
 after_test:
   - node-pre-gyp package 2>&1
@@ -49,4 +50,4 @@ after_deploy:
   - node-pre-gyp clean
   - set npm_config_fallback_to_build=false
   - yarn --frozen-lockfile
-  - node --expose-gc node_modules/nodeunit/bin/nodeunit test
+  - yarn test
