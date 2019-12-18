@@ -21,8 +21,21 @@ LibXMLJS LibXMLJS::instance;
 // track how much memory libxml2 is using
 int xml_memory_used = 0;
 
+// How often we report memory usage changes back to V8.
+const int nan_adjust_external_memory_threshold = 1024 * 1024;
+
 // track how many nodes haven't been freed
 int nodeCount = 0;
+
+void adjustExternalMemory()
+{
+    const int diff = xmlMemUsed() - xml_memory_used;
+
+    if (abs(diff) > nan_adjust_external_memory_threshold) {
+        xml_memory_used += diff;
+        Nan::AdjustExternalMemory(diff);
+    }
+}
 
 // wrapper for xmlMemMalloc to update v8's knowledge of memory used
 // the GC relies on this information
@@ -36,9 +49,7 @@ void* xmlMemMallocWrap(size_t size)
         return res;
     }
 
-    const int diff = xmlMemUsed() - xml_memory_used;
-    xml_memory_used += diff;
-    Nan::AdjustExternalMemory(diff);
+    adjustExternalMemory();
     return res;
 }
 
@@ -59,9 +70,7 @@ void xmlMemFreeWrap(void* p)
         return;
     }
 
-    const int diff = xmlMemUsed() - xml_memory_used;
-    xml_memory_used += diff;
-    Nan::AdjustExternalMemory(diff);
+    adjustExternalMemory();
 }
 
 // wrapper for xmlMemRealloc to update v8's knowledge of memory used
@@ -75,9 +84,7 @@ void* xmlMemReallocWrap(void* ptr, size_t size)
         return res;
     }
 
-    const int diff = xmlMemUsed() - xml_memory_used;
-    xml_memory_used += diff;
-    Nan::AdjustExternalMemory(diff);
+    adjustExternalMemory();
     return res;
 }
 
@@ -92,9 +99,7 @@ char* xmlMemoryStrdupWrap(const char* str)
         return res;
     }
 
-    const int diff = xmlMemUsed() - xml_memory_used;
-    xml_memory_used += diff;
-    Nan::AdjustExternalMemory(diff);
+    adjustExternalMemory();
     return res;
 }
 
