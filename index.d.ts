@@ -41,6 +41,7 @@ interface ParserOptions {
     oldsax?: boolean;
     ignore_enc?: boolean;
     big_lines?: boolean;
+    baseUrl?: string;
 }
 
 export function parseXml(source: string, options?: ParserOptions): Document;
@@ -64,12 +65,14 @@ export class Document {
     errors: SyntaxError[];
     validationErrors: ValidationError[];
 
-    child(idx: number): Element|null;
-    childNodes(): Element[];
+    child(idx: number): Node|null;
+    childNodes(): Node[];
     encoding(): string;
     encoding(enc: string): this;
-    find(xpath: string): Element[];
-    get(xpath: string, namespaces?: StringMap): Element|null;
+    find<T extends Node = Node>(xpath: string, ns_uri?: string): T[];
+    find<T extends Node = Node>(xpath: string, namespaces: StringMap): T[];
+    get<T extends Node = Node>(xpath: string, ns_uri?: string): T|null;
+    get<T extends Node = Node>(xpath: string, namespaces: StringMap): T|null;
     node(name: string, content?: string): Element;
     root(): Element|null;
     root(newRoot: Node): Node;
@@ -105,6 +108,7 @@ export class Node {
     prevSibling(): Node|null;
     nextSibling(): Node|null;
 
+    line(): number;
     type(): 'comment'|'element'|'text'|'attribute';
     remove(): this;
     clone(): this;
@@ -145,16 +149,16 @@ export class Element extends Node {
     addNextSibling(siblingNode: Node): Node;
     addPrevSibling(siblingNode: Node): Node;
 
-    find(xpath: string, ns_uri?: string): Node[];
-    find(xpath: string, namespaces: StringMap): Node[];
-    get(xpath: string, ns_uri?: string): Element|null;
-    get(xpath: string, namespaces: StringMap): Element|null;
+    find<T extends Node = Node>(xpath: string, ns_uri?: string): T[];
+    find<T extends Node = Node>(xpath: string, namespaces: StringMap): T[];
+    get<T extends Node = Node>(xpath: string, ns_uri?: string): T|null;
+    get<T extends Node = Node>(xpath: string, namespaces: StringMap): T|null;
 
     defineNamespace(prefixOrHref: string, hrefInCaseOfPrefix?: string): Namespace;
 
     namespace(): Namespace|null;
     namespace(newNamespace: Namespace): this;
-    namespace(prefixOrHref: string, hrefInCaseOfPrefix?: string): Namespace;
+    namespace(prefixOrHref: string, hrefInCaseOfPrefix?: string): this;
 
     replace(replacement: string): string;
     replace(replacement: Element): Element;
@@ -186,7 +190,7 @@ export class SaxPushParser extends EventEmitter {
     push(source: string): boolean;
 }
 
-export interface SyntaxError {
+export interface SyntaxError extends Error {
     domain: number|null;
     code: number|null;
     message: string|null;
