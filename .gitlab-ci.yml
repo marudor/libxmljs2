@@ -45,10 +45,6 @@ node-10:
   <<: *glibc
   image: node:10
 
-node-8:
-  <<: *glibc
-  image: node:8
-
 node-13-alpine:
   <<: *muslc
   image: node:13-alpine
@@ -64,10 +60,6 @@ node-11-alpine:
 node-10-alpine:
   <<: *muslc
   image: node:10-alpine
-
-node-8-alpine:
-  <<: *muslc
-  image: node:8-alpine
 
 deploy:
   image: node:12-alpine

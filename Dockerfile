@@ -1,4 +1,4 @@
-FROM node:11-alpine
+FROM node:12-alpine
 COPY . /libxmljs
 WORKDIR /libxmljs
 # RUN . $NVM_DIR/nvm.sh && npm install -g node-gyp node-pre-gyp
