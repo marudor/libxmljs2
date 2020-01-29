@@ -25,6 +25,10 @@ before_install:
 - yarn global add node-gyp node-pre-gyp
 install:
 - npm_config_build_from_source=true yarn --frozen-lockfile
+script:
+- yarn test
+- yarn lint
+- yarn tsd
 before_deploy:
 - node-pre-gyp package 2>&1
 deploy:

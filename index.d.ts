@@ -193,7 +193,6 @@ export class SaxPushParser extends EventEmitter {
 export interface SyntaxError extends Error {
     domain: number|null;
     code: number|null;
-    message: string|null;
     level: number|null;
     file: string|null;
     line: number|null;
