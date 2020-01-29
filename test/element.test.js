@@ -246,4 +246,13 @@ describe('element', () => {
     expect(doc).toBe(baz.parent());
     expect('baz').toBe(baz.text());
   });
+
+  it('add cdata', () => {
+    const doc = libxml.Document();
+    const element = new libxml.Element(doc, 'name', 'content');
+    const cdataResult = element.cdata('cdata');
+
+    expect(cdataResult).toBe(element);
+    expect(element.toString()).toContain('[CDATA[cdata]]');
+  });
 });

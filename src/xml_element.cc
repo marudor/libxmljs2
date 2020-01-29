@@ -158,6 +158,7 @@ NAN_METHOD(XmlElement::AddCData)
   return info.GetReturnValue().Set(info.Holder());
 }
 
+
 NAN_METHOD(XmlElement::Find)
 {
   Nan::HandleScope scope;
@@ -631,7 +632,7 @@ void XmlElement::Initialize(Local<Object> target)
                           XmlElement::AddChild);
 
   Nan::SetPrototypeMethod(tmpl,
-                          "addCData",
+                          "cdata",
                           XmlElement::AddCData);
 
   Nan::SetPrototypeMethod(tmpl,

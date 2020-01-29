@@ -12,10 +12,10 @@ namespace libxmljs
 class XmlDocument : public Nan::ObjectWrap
 {
 
+public:
   // used to create new instanced of a document handle
   static Nan::Persistent<v8::FunctionTemplate> constructor_template;
 
-public:
   // TODO make private with accessor
   xmlDoc *xml_obj;
 
@@ -57,6 +57,7 @@ protected:
   static NAN_METHOD(ToString);
   static NAN_METHOD(Validate);
   static NAN_METHOD(RngValidate);
+  static NAN_METHOD(type);
 
   // Static member variables
   static const int DEFAULT_PARSING_OPTS;

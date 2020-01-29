@@ -233,11 +233,11 @@ XmlTextWriter::Initialize(Local<Object> target) {
           XmlTextWriter::OpenMemory);
 
   Nan::SetPrototypeMethod(writer_t,
-          "_bufferContent",
+          "toString",
           XmlTextWriter::BufferContent);
 
   Nan::SetPrototypeMethod(writer_t,
-          "_bufferEmpty",
+          "clear",
           XmlTextWriter::BufferEmpty);
 
   Nan::SetPrototypeMethod(writer_t,

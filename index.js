@@ -21,11 +21,11 @@ module.exports.libxml_debug_enabled = bindings.libxml_debug_enabled;
 module.exports.features = bindings.features;
 
 // lib exports
-module.exports.Comment = require('./lib/comment');
+module.exports.Comment = bindings.Comment;
 module.exports.Document = Document;
 module.exports.Element = require('./lib/element');
-module.exports.ProcessingInstruction = require('./lib/pi');
-module.exports.Text = require('./lib/text');
+module.exports.ProcessingInstruction = bindings.ProcessingInstruction;
+module.exports.Text = bindings.Text;
 
 // Compatibility synonyms
 Document.fromXmlString = Document.fromXml;

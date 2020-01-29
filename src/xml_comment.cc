@@ -19,16 +19,13 @@ Nan::Persistent<FunctionTemplate> XmlComment::constructor_template;
 // doc, content
 NAN_METHOD(XmlComment::New)
 {
+  NAN_CONSTRUCTOR_CHECK(Comment)
   Nan::HandleScope scope;
 
-  // if we were created for an existing xml node, then we don't need
-  // to create a new node on the document
-  if (info.Length() == 0)
-  {
-    return info.GetReturnValue().Set(info.Holder());
-  }
+  DOCUMENT_ARG_CHECK
 
-  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(Nan::To<Object>(info[0]).ToLocalChecked());
+
+  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(doc);
   assert(document);
 
   Local<Value> contentOpt;

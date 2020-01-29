@@ -268,6 +268,11 @@ NAN_METHOD(XmlDocument::ToString)
   return info.GetReturnValue().Set(ret);
 }
 
+NAN_METHOD(XmlDocument::type)
+{
+  return info.GetReturnValue().Set(Nan::New<String>("document").ToLocalChecked());
+}
+
 // not called from node
 // private api
 Local<Object>
@@ -654,15 +659,15 @@ void XmlDocument::Initialize(Local<Object> target)
 
   /// setup internal methods for bindings
   Nan::SetPrototypeMethod(tmpl,
-                          "_root",
+                          "root",
                           XmlDocument::Root);
 
   Nan::SetPrototypeMethod(tmpl,
-                          "_version",
+                          "version",
                           XmlDocument::Version);
 
   Nan::SetPrototypeMethod(tmpl,
-                          "_encoding",
+                          "encoding",
                           XmlDocument::Encoding);
 
   Nan::SetPrototypeMethod(tmpl,
@@ -679,8 +684,11 @@ void XmlDocument::Initialize(Local<Object> target)
                           "_setDtd",
                           XmlDocument::SetDtd);
   Nan::SetPrototypeMethod(tmpl,
-                          "_getDtd",
+                          "getDtd",
                           XmlDocument::GetDtd);
+  Nan::SetPrototypeMethod(tmpl,
+                          "type",
+                          XmlDocument::type);
 
   Nan::SetMethod(target, "fromXml", XmlDocument::FromXml);
   Nan::SetMethod(target, "fromHtml", XmlDocument::FromHtml);

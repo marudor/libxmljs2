@@ -19,16 +19,16 @@ Nan::Persistent<FunctionTemplate> XmlProcessingInstruction::constructor_template
 // doc, content
 NAN_METHOD(XmlProcessingInstruction::New)
 {
+  NAN_CONSTRUCTOR_CHECK(ProcessingInstruction)
   Nan::HandleScope scope;
 
-  // if we were created for an existing xml node, then we don't need
-  // to create a new node on the document
-  if (info.Length() == 0)
-  {
-    return info.GetReturnValue().Set(info.Holder());
+  DOCUMENT_ARG_CHECK
+  if (!info[1]->IsString()) {
+    Nan::ThrowError("name argument must be of type string");
+    return;
   }
 
-  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(Nan::To<Object>(info[0]).ToLocalChecked());
+  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(doc);
   assert(document);
 
   Nan::Utf8String name(info[1]);
@@ -37,6 +37,9 @@ NAN_METHOD(XmlProcessingInstruction::New)
   if (info[2]->IsString())
   {
     contentOpt = info[2];
+  } else if (!info[2]->IsNullOrUndefined()) {
+    Nan::ThrowError("content argument must be of type string");
+    return;
   }
   Nan::Utf8String contentRaw(contentOpt);
   const char *content = (contentRaw.length()) ? *contentRaw : NULL;

@@ -4,13 +4,24 @@ describe('text', () => {
   it('invalid_new', () => {
     const doc = libxml.Document();
 
-    expect(() => libxml.Text()).toThrow();
-    expect(() => libxml.Text(doc)).toThrow();
+    expect(() => new libxml.Text(undefined, '')).toThrow(
+      'document argument required'
+    );
+    expect(() => new libxml.Text()).toThrow('document argument required');
+    expect(() => new libxml.Text({}, '')).toThrow(
+      'document argument must be an instance of Document'
+    );
+    expect(() => new libxml.Text(doc)).toThrow(
+      'content argument must be of type string'
+    );
+    expect(() => new libxml.Text(doc, 1)).toThrow(
+      'content argument must be of type string'
+    );
   });
 
   it('new', () => {
     const doc = libxml.Document();
-    const elem = libxml.Text(doc, 'node content');
+    const elem = new libxml.Text(doc, 'node content');
 
     doc.root(elem);
     expect(elem.text()).toBe('node content');
@@ -18,7 +29,7 @@ describe('text', () => {
 
   it('setters', () => {
     const doc = libxml.Document();
-    const elem = libxml.Text(doc, 'node content');
+    const elem = new libxml.Text(doc, 'node content');
 
     // change content
     expect(elem.text()).toBe('node content');
@@ -28,7 +39,7 @@ describe('text', () => {
 
   it('getters', () => {
     const doc = libxml.Document();
-    const elem = libxml.Text(doc, 'getters');
+    const elem = new libxml.Text(doc, 'getters');
 
     expect(() => {
       elem.name();
@@ -39,7 +50,7 @@ describe('text', () => {
 
   it('remove', () => {
     const doc = libxml.Document();
-    const elem = libxml.Text(doc, 'node content');
+    const elem = new libxml.Text(doc, 'node content');
 
     doc.root(elem);
     expect(doc.toString()).toBe(
@@ -51,7 +62,7 @@ describe('text', () => {
 
   it('toString', () => {
     const doc = libxml.Document();
-    const elem = libxml.Text(doc, 'node content');
+    const elem = new libxml.Text(doc, 'node content');
 
     doc.root(elem);
     expect(elem.toString()).toBe('node content');
@@ -71,7 +82,7 @@ describe('text', () => {
   it('addChildEscaping', () => {
     const doc = libxml.parseXmlString('<p></p>');
 
-    doc.root().addChild(libxml.Text(doc, 'x&x'));
+    doc.root().addChild(new libxml.Text(doc, 'x&x'));
 
     expect(doc.root().toString()).toBe('<p>x&amp;x</p>');
   });

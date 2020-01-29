@@ -21,16 +21,23 @@ Nan::Persistent<FunctionTemplate> XmlText::constructor_template;
 // doc, name, content
 NAN_METHOD(XmlText::New)
 {
+  NAN_CONSTRUCTOR_CHECK(Text)
   Nan::HandleScope scope;
 
   // if we were created for an existing xml node, then we don't need
   // to create a new node on the document
-  if (info.Length() == 0)
-  {
-    return info.GetReturnValue().Set(info.Holder());
+  // if (info.Length() == 0)
+  // {
+  //   return info.GetReturnValue().Set(info.Holder());
+  // }
+
+  DOCUMENT_ARG_CHECK
+  if (!info[1]->IsString()) {
+    Nan::ThrowError("content argument must be of type string");
+    return;
   }
 
-  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(Nan::To<Object>(info[0]).ToLocalChecked());
+  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(doc);
   assert(document);
 
   Local<Value> contentOpt;

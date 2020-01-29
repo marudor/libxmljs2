@@ -11,6 +11,25 @@
     return Nan::ThrowTypeError(err);                                            \
   }
 
+#define NAN_CONSTRUCTOR_CHECK(name) \
+if (!info.IsConstructCall()) { \
+  Nan::ThrowTypeError("Class constructor " #name " cannot be invoked without 'new'"); \
+  return; \
+}
+
+#define DOCUMENT_ARG_CHECK \
+if (info.Length() == 0 || info[0]->IsNullOrUndefined()) { \
+  Nan::ThrowError("document argument required"); \
+  return; \
+} \
+Local<Object> doc = Nan::To<Object>(info[0]).ToLocalChecked(); \
+if (!XmlDocument::constructor_template.Get(Nan::GetCurrentContext()->GetIsolate())->HasInstance(doc)) { \
+  Nan::ThrowError("document argument must be an instance of Document"); \
+  return; \
+}
+
+
+
 namespace libxmljs {
 
 #ifdef LIBXML_DEBUG_ENABLED

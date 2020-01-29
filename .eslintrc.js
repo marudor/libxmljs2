@@ -7,4 +7,7 @@ module.exports = {
   },
   globals: {
   },
+  rules: {
+    'guard-for-in': 0,
+  }
 };

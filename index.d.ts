@@ -134,6 +134,7 @@ export class Element extends Node {
     attr(name: string, value: string): this; //setter
     attr(attrObject: StringMap): this; //setter using stringMap
     attrs(): Attribute[];
+    cdata(data: string): this;
 
     doc(): Document;
     child(idx: number): Node | null;
