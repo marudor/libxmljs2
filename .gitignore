@@ -6,7 +6,3 @@ npm-debug.log
 .token
 .vscode
 .idea
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
-.pnp.*
