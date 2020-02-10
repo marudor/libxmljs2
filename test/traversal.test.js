@@ -2,7 +2,7 @@ const libxml = require('../index');
 
 describe('traversal', () => {
   it('built', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const child = doc.node('root').node('child');
     const sibling = doc.root().node('sibling');
     const gchild = child.node('grandchild');
@@ -19,7 +19,7 @@ describe('traversal', () => {
 
   it('children', () => {
     const children = [];
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const root = doc.node('root');
 
     children.push(root.node('child'));
@@ -34,7 +34,7 @@ describe('traversal', () => {
 
   it('siblings', () => {
     const children = [];
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const root = doc.node('root');
 
     children.push(root.node('prevSibling'));

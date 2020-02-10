@@ -2,7 +2,7 @@ const libxml = require('../index');
 
 describe('searching', () => {
   it('get', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const root = doc.node('root');
     const child = root.node('child');
     const grandchild = child.node('grandchild');
@@ -15,7 +15,7 @@ describe('searching', () => {
   });
 
   it('get_missing', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
 
     doc.node('root');
 
@@ -25,7 +25,7 @@ describe('searching', () => {
   });
 
   it('get_attr', () => {
-    let doc = libxml.Document();
+    let doc = new libxml.Document();
     const root = doc.node('root');
     const child = root.node('child');
 
@@ -58,7 +58,7 @@ describe('searching', () => {
   });
 
   it('get_non_nodeset', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
 
     doc.node('root');
 
@@ -70,7 +70,7 @@ describe('searching', () => {
 
   it('find', () => {
     const children = [];
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const root = doc.node('root');
 
     children.push(root.node('child'));
@@ -92,7 +92,7 @@ describe('searching', () => {
   // non prefixed namespaces
   describe('namespace', () => {
     it('get', () => {
-      const doc = libxml.Document();
+      const doc = new libxml.Document();
       const root = doc.node('root');
       const child = root.node('child');
       const grandchild = child.node('grandchild');
@@ -107,7 +107,7 @@ describe('searching', () => {
     });
     it('find', () => {
       const children = [];
-      const doc = libxml.Document();
+      const doc = new libxml.Document();
       const root = doc.node('root');
 
       children.push(root.node('child'));
@@ -129,7 +129,7 @@ describe('searching', () => {
 
   describe('prefixed namespace', () => {
     it('get', () => {
-      const doc = libxml.Document();
+      const doc = new libxml.Document();
       const root = doc.node('root');
       const child = root.node('child');
       const grandchild = child.node('grandchild');
@@ -150,7 +150,7 @@ describe('searching', () => {
     });
     it('find', () => {
       const children = [];
-      const doc = libxml.Document();
+      const doc = new libxml.Document();
       const root = doc.node('root');
 
       children.push(root.node('child'));

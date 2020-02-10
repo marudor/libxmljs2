@@ -3,21 +3,21 @@ const libxml = require('../index');
 describe('node attributes', () => {
   it('basic', () => {
     // reading a node is implied during all tests
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name').attr({ to: 'wongfoo' });
 
     expect(elem.attr('to').value()).toBe('wongfoo');
   });
 
   it('null', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name');
 
     expect(elem.attr('to')).toBe(null);
   });
 
   it('assign_object', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name');
 
     elem.attr({ to: 'wongfoo' });
@@ -25,7 +25,7 @@ describe('node attributes', () => {
   });
 
   it('change', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name').attr({ to: 'wongfoo' });
 
     expect(elem.attr('to').value()).toBe('wongfoo');
@@ -34,7 +34,7 @@ describe('node attributes', () => {
   });
 
   it('attrs', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('root');
 
     expect(elem.attrs()).toEqual([]);
@@ -52,7 +52,7 @@ describe('node attributes', () => {
   });
 
   it('siblings', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc
       .node('root')
       .attr({ foo: 'bar' })
@@ -66,7 +66,7 @@ describe('node attributes', () => {
   });
 
   it('getters', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('root').attr({ foo: 'bar' });
 
     // get node

@@ -8,8 +8,7 @@
 
 #include "xml_sax_parser.h"
 
-libxmljs::XmlSaxParser *LXJS_GET_PARSER_FROM_CONTEXT(void *context)
-{
+libxmljs::XmlSaxParser *LXJS_GET_PARSER_FROM_CONTEXT(void *context) {
   _xmlParserCtxt *the_context = static_cast<_xmlParserCtxt *>(context);
   return static_cast<libxmljs::XmlSaxParser *>(the_context->_private);
 }
@@ -19,12 +18,9 @@ libxmljs::XmlSaxParser *LXJS_GET_PARSER_FROM_CONTEXT(void *context)
 using namespace v8;
 Nan::Persistent<String> emit_symbol;
 
-namespace libxmljs
-{
+namespace libxmljs {
 
-XmlSaxParser::XmlSaxParser()
-    : context_(NULL)
-{
+XmlSaxParser::XmlSaxParser() : context_(NULL) {
   xmlSAXHandler tmp = {
       0, // internalSubset;
       0, // isStandalone;
@@ -39,49 +35,42 @@ XmlSaxParser::XmlSaxParser()
       0, // unparsedEntityDecl;
       0, // setDocumentLocator;
       XmlSaxParser::start_document,
-      XmlSaxParser::end_document,     // endDocument;
-      0,                              // startElement;
-      0,                              // endElement;
-      0,                              // reference;
-      XmlSaxParser::characters,       // characters;
-      0,                              // ignorableWhitespace;
-      0,                              // processingInstruction;
-      XmlSaxParser::comment,          // comment;
-      XmlSaxParser::warning,          // warning;
-      XmlSaxParser::error,            // error;
-      0,                              // fatalError; /* unused error() get all the errors */
-      0,                              // getParameterEntity;
+      XmlSaxParser::end_document, // endDocument;
+      0,                          // startElement;
+      0,                          // endElement;
+      0,                          // reference;
+      XmlSaxParser::characters,   // characters;
+      0,                          // ignorableWhitespace;
+      0,                          // processingInstruction;
+      XmlSaxParser::comment,      // comment;
+      XmlSaxParser::warning,      // warning;
+      XmlSaxParser::error,        // error;
+      0, // fatalError; /* unused error() get all the errors */
+      0, // getParameterEntity;
       XmlSaxParser::cdata_block,      // cdataBlock;
       0,                              // externalSubset;
       XML_SAX2_MAGIC,                 /* force SAX2 */
       this,                           /* _private */
       XmlSaxParser::start_element_ns, // startElementNs;
       XmlSaxParser::end_element_ns,   // endElementNs;
-      0                               // SaxParserCallback::structured_error // serror
+      0 // SaxParserCallback::structured_error // serror
   };
 
   sax_handler_ = tmp;
 }
 
-XmlSaxParser::~XmlSaxParser()
-{
-  this->releaseContext();
-}
+XmlSaxParser::~XmlSaxParser() { this->releaseContext(); }
 
-void XmlSaxParser::initializeContext()
-{
+void XmlSaxParser::initializeContext() {
   assert(context_);
   context_->validate = 0;
   context_->_private = this;
 }
 
-void XmlSaxParser::releaseContext()
-{
-  if (context_)
-  {
+void XmlSaxParser::releaseContext() {
+  if (context_) {
     context_->_private = 0;
-    if (context_->myDoc != NULL)
-    {
+    if (context_->myDoc != NULL) {
       xmlFreeDoc(context_->myDoc);
       context_->myDoc = NULL;
     }
@@ -91,8 +80,7 @@ void XmlSaxParser::releaseContext()
   }
 }
 
-NAN_METHOD(XmlSaxParser::NewParser)
-{
+NAN_METHOD(XmlSaxParser::NewParser) {
   Nan::HandleScope scope;
   XmlSaxParser *parser = new XmlSaxParser();
   parser->Wrap(info.Holder());
@@ -100,8 +88,7 @@ NAN_METHOD(XmlSaxParser::NewParser)
   return info.GetReturnValue().Set(info.Holder());
 }
 
-NAN_METHOD(XmlSaxParser::NewPushParser)
-{
+NAN_METHOD(XmlSaxParser::NewPushParser) {
   Nan::HandleScope scope;
   XmlSaxParser *parser = new XmlSaxParser();
   parser->initialize_push_parser();
@@ -110,68 +97,61 @@ NAN_METHOD(XmlSaxParser::NewPushParser)
   return info.GetReturnValue().Set(info.Holder());
 }
 
-void XmlSaxParser::Callback(const char *what,
-                            int argc,
-                            Local<Value> argv[])
-{
+void XmlSaxParser::Callback(const char *what, int argc, Local<Value> argv[]) {
   Nan::HandleScope scope;
 
   // new arguments array with first argument being the event name
   Local<Value> *args = new Local<Value>[argc + 1];
   args[0] = Nan::New<String>(what).ToLocalChecked();
-  for (int i = 1; i <= argc; ++i)
-  {
+  for (int i = 1; i <= argc; ++i) {
     args[i] = argv[i - 1];
   }
 
   // get the 'emit' function from ourselves
-  Local<Value> emit_v = Nan::Get(this->handle(), Nan::New(emit_symbol)).ToLocalChecked();
+  Local<Value> emit_v =
+      Nan::Get(this->handle(), Nan::New(emit_symbol)).ToLocalChecked();
   assert(emit_v->IsFunction());
 
   // trigger the event
   Nan::AsyncResource res("nan:makeCallback");
-  res.runInAsyncScope(this->handle(), Local<Function>::Cast(emit_v), argc + 1, args);
+  res.runInAsyncScope(this->handle(), Local<Function>::Cast(emit_v), argc + 1,
+                      args);
 
   delete[] args;
 }
 
-NAN_METHOD(XmlSaxParser::Push)
-{
+NAN_METHOD(XmlSaxParser::Push) {
   Nan::HandleScope scope;
-  LIBXMLJS_ARGUMENT_TYPE_CHECK(info[0],
-                               IsString,
+  LIBXMLJS_ARGUMENT_TYPE_CHECK(info[0], IsString,
                                "Bad Argument: parseString requires a string");
 
   XmlSaxParser *parser = Nan::ObjectWrap::Unwrap<XmlSaxParser>(info.Holder());
 
   Nan::Utf8String parsable(Nan::To<String>(info[0]).ToLocalChecked());
 
-  bool terminate = info.Length() > 1 ? Nan::To<Boolean>(info[1]).ToLocalChecked()->Value() : false;
+  bool terminate = info.Length() > 1
+                       ? Nan::To<Boolean>(info[1]).ToLocalChecked()->Value()
+                       : false;
 
   parser->push(*parsable, parsable.length(), terminate);
 
   return info.GetReturnValue().Set(Nan::True());
 }
 
-void XmlSaxParser::initialize_push_parser()
-{
+void XmlSaxParser::initialize_push_parser() {
   context_ = xmlCreatePushParserCtxt(&sax_handler_, NULL, NULL, 0, "");
   context_->replaceEntities = 1;
   initializeContext();
 }
 
-void XmlSaxParser::push(const char *str,
-                        unsigned int size,
-                        bool terminate = false)
-{
+void XmlSaxParser::push(const char *str, unsigned int size,
+                        bool terminate = false) {
   xmlParseChunk(context_, str, size, terminate);
 }
 
-NAN_METHOD(XmlSaxParser::ParseString)
-{
+NAN_METHOD(XmlSaxParser::ParseString) {
   Nan::HandleScope scope;
-  LIBXMLJS_ARGUMENT_TYPE_CHECK(info[0],
-                               IsString,
+  LIBXMLJS_ARGUMENT_TYPE_CHECK(info[0], IsString,
                                "Bad Argument: parseString requires a string");
 
   XmlSaxParser *parser = Nan::ObjectWrap::Unwrap<XmlSaxParser>(info.Holder());
@@ -183,9 +163,7 @@ NAN_METHOD(XmlSaxParser::ParseString)
   return info.GetReturnValue().Set(Nan::True());
 }
 
-void XmlSaxParser::parse_string(const char *str,
-                                unsigned int size)
-{
+void XmlSaxParser::parse_string(const char *str, unsigned int size) {
   context_ = xmlCreateMemoryParserCtxt(str, size);
   initializeContext();
   context_->replaceEntities = 1;
@@ -196,28 +174,22 @@ void XmlSaxParser::parse_string(const char *str,
   releaseContext();
 }
 
-void XmlSaxParser::start_document(void *context)
-{
+void XmlSaxParser::start_document(void *context) {
   libxmljs::XmlSaxParser *parser = LXJS_GET_PARSER_FROM_CONTEXT(context);
   parser->Callback("startDocument");
 }
 
-void XmlSaxParser::end_document(void *context)
-{
+void XmlSaxParser::end_document(void *context) {
   libxmljs::XmlSaxParser *parser = LXJS_GET_PARSER_FROM_CONTEXT(context);
   parser->Callback("endDocument");
 }
 
-void XmlSaxParser::start_element_ns(void *context,
-                                    const xmlChar *localname,
-                                    const xmlChar *prefix,
-                                    const xmlChar *uri,
+void XmlSaxParser::start_element_ns(void *context, const xmlChar *localname,
+                                    const xmlChar *prefix, const xmlChar *uri,
                                     int nb_namespaces,
                                     const xmlChar **namespaces,
-                                    int nb_attributes,
-                                    int nb_defaulted,
-                                    const xmlChar **attributes)
-{
+                                    int nb_attributes, int nb_defaulted,
+                                    const xmlChar **attributes) {
   Nan::HandleScope scope;
   libxmljs::XmlSaxParser *parser = LXJS_GET_PARSER_FROM_CONTEXT(context);
 
@@ -234,10 +206,8 @@ void XmlSaxParser::start_element_ns(void *context,
   // Build attributes list
   // Each attribute is an array of [localname, prefix, URI, value, end]
   Local<Array> attrList = Nan::New<Array>(nb_attributes);
-  if (attributes)
-  {
-    for (i = 0, j = 0; j < nb_attributes; i += 5, j++)
-    {
+  if (attributes) {
+    for (i = 0, j = 0; j < nb_attributes; i += 5, j++) {
       attrLocal = attributes[i + 0];
       attrPref = attributes[i + 1];
       attrUri = attributes[i + 2];
@@ -246,62 +216,57 @@ void XmlSaxParser::start_element_ns(void *context,
       elem = Nan::New<Array>(4);
 
       Nan::Set(elem, Nan::New<Integer>(0),
-               Nan::New<String>((const char *)attrLocal, xmlStrlen(attrLocal)).ToLocalChecked());
+               Nan::New<String>((const char *)attrLocal, xmlStrlen(attrLocal))
+                   .ToLocalChecked());
 
       Nan::Set(elem, Nan::New<Integer>(1),
-               Nan::New<String>((const char *)attrPref, xmlStrlen(attrPref)).ToLocalChecked());
+               Nan::New<String>((const char *)attrPref, xmlStrlen(attrPref))
+                   .ToLocalChecked());
 
       Nan::Set(elem, Nan::New<Integer>(2),
-               Nan::New<String>((const char *)attrUri, xmlStrlen(attrUri)).ToLocalChecked());
+               Nan::New<String>((const char *)attrUri, xmlStrlen(attrUri))
+                   .ToLocalChecked());
 
-      Nan::Set(elem, Nan::New<Integer>(3),
-               Nan::New<String>((const char *)attrVal, attributes[i + 4] - attrVal).ToLocalChecked());
+      Nan::Set(
+          elem, Nan::New<Integer>(3),
+          Nan::New<String>((const char *)attrVal, attributes[i + 4] - attrVal)
+              .ToLocalChecked());
 
       Nan::Set(attrList, Nan::New<Integer>(j), elem);
     }
   }
   argv[1] = attrList;
 
-  if (prefix)
-  {
+  if (prefix) {
     argv[2] = Nan::New<String>((const char *)prefix).ToLocalChecked();
-  }
-  else
-  {
+  } else {
     argv[2] = Nan::Null();
   }
 
-  if (uri)
-  {
+  if (uri) {
     argv[3] = Nan::New<String>((const char *)uri).ToLocalChecked();
-  }
-  else
-  {
+  } else {
     argv[3] = Nan::Null();
   }
 
   // Build namespace array of arrays [[prefix, ns], [prefix, ns]]
   Local<Array> nsList = Nan::New<Array>(nb_namespaces);
-  if (namespaces)
-  {
-    for (i = 0, j = 0; j < nb_namespaces; j++)
-    {
+  if (namespaces) {
+    for (i = 0, j = 0; j < nb_namespaces; j++) {
       nsPref = namespaces[i++];
       nsUri = namespaces[i++];
 
       elem = Nan::New<Array>(2);
-      if (xmlStrlen(nsPref) == 0)
-      {
+      if (xmlStrlen(nsPref) == 0) {
         Nan::Set(elem, Nan::New<Integer>(0), Nan::Null());
-      }
-      else
-      {
-        Nan::Set(elem, Nan::New<Integer>(0), Nan::New<String>((const char *)nsPref, xmlStrlen(nsPref)).ToLocalChecked());
+      } else {
+        Nan::Set(elem, Nan::New<Integer>(0),
+                 Nan::New<String>((const char *)nsPref, xmlStrlen(nsPref))
+                     .ToLocalChecked());
       }
 
       Nan::Set(elem, Nan::New<Integer>(1),
-               Nan::New<String>((const char *)nsUri,
-                                    xmlStrlen(nsUri))
+               Nan::New<String>((const char *)nsUri, xmlStrlen(nsUri))
                    .ToLocalChecked());
 
       Nan::Set(nsList, Nan::New<Integer>(j), elem);
@@ -312,93 +277,75 @@ void XmlSaxParser::start_element_ns(void *context,
   parser->Callback("startElementNS", argc, argv);
 }
 
-void XmlSaxParser::end_element_ns(void *context,
-                                  const xmlChar *localname,
-                                  const xmlChar *prefix,
-                                  const xmlChar *uri)
-{
+void XmlSaxParser::end_element_ns(void *context, const xmlChar *localname,
+                                  const xmlChar *prefix, const xmlChar *uri) {
   Nan::HandleScope scope;
   libxmljs::XmlSaxParser *parser = LXJS_GET_PARSER_FROM_CONTEXT(context);
 
   Local<Value> argv[3];
   argv[0] = Nan::New<String>((const char *)localname).ToLocalChecked();
 
-  if (prefix)
-  {
+  if (prefix) {
     argv[1] = Nan::New<String>((const char *)prefix).ToLocalChecked();
-  }
-  else
-  {
+  } else {
     argv[1] = Nan::Null();
   }
 
-  if (uri)
-  {
+  if (uri) {
     argv[2] = Nan::New<String>((const char *)uri).ToLocalChecked();
-  }
-  else
-  {
+  } else {
     argv[2] = Nan::Null();
   }
 
   parser->Callback("endElementNS", 3, argv);
 }
 
-void XmlSaxParser::characters(void *context,
-                              const xmlChar *ch,
-                              int len)
-{
+void XmlSaxParser::characters(void *context, const xmlChar *ch, int len) {
   Nan::HandleScope scope;
   libxmljs::XmlSaxParser *parser = LXJS_GET_PARSER_FROM_CONTEXT(context);
 
-  Local<Value> argv[1] = {Nan::New<String>((const char *)ch, len).ToLocalChecked()};
+  Local<Value> argv[1] = {
+      Nan::New<String>((const char *)ch, len).ToLocalChecked()};
   parser->Callback("characters", 1, argv);
 }
 
-void XmlSaxParser::comment(void *context, const xmlChar *value)
-{
+void XmlSaxParser::comment(void *context, const xmlChar *value) {
   Nan::HandleScope scope;
   libxmljs::XmlSaxParser *parser = LXJS_GET_PARSER_FROM_CONTEXT(context);
-  Local<Value> argv[1] = {Nan::New<String>((const char *)value).ToLocalChecked()};
+  Local<Value> argv[1] = {
+      Nan::New<String>((const char *)value).ToLocalChecked()};
   parser->Callback("comment", 1, argv);
 }
 
-void XmlSaxParser::cdata_block(void *context, const xmlChar *value,
-                               int len)
-{
+void XmlSaxParser::cdata_block(void *context, const xmlChar *value, int len) {
   Nan::HandleScope scope;
   libxmljs::XmlSaxParser *parser = LXJS_GET_PARSER_FROM_CONTEXT(context);
-  Local<Value> argv[1] = {Nan::New<String>((const char *)value, len).ToLocalChecked()};
+  Local<Value> argv[1] = {
+      Nan::New<String>((const char *)value, len).ToLocalChecked()};
   parser->Callback("cdata", 1, argv);
 }
 
 #ifdef WIN32
-//https://github.com/json-c/json-c/blob/master/printbuf.c
-//Copyright (c) 2004, 2005 Metaparadigm Pte Ltd
-static int vasprintf(char **buf, const char *fmt, va_list ap)
-{
+// https://github.com/json-c/json-c/blob/master/printbuf.c
+// Copyright (c) 2004, 2005 Metaparadigm Pte Ltd
+static int vasprintf(char **buf, const char *fmt, va_list ap) {
   int chars;
   char *b;
 
-  if (!buf)
-  {
+  if (!buf) {
     return -1;
   }
 
   chars = _vscprintf(fmt, ap) + 1;
 
   b = (char *)malloc(sizeof(char) * chars);
-  if (!b)
-  {
+  if (!b) {
     return -1;
   }
 
-  if ((chars = vsprintf(b, fmt, ap)) < 0)
-  {
+  if ((chars = vsprintf(b, fmt, ap)) < 0) {
     free(b);
-  }
-  else
-  {
+  } else {
     *buf = b;
   }
 
@@ -406,8 +353,7 @@ static int vasprintf(char **buf, const char *fmt, va_list ap)
 }
 #endif /* WIN32 */
 
-void XmlSaxParser::warning(void *context, const char *msg, ...)
-{
+void XmlSaxParser::warning(void *context, const char *msg, ...) {
   Nan::HandleScope scope;
   libxmljs::XmlSaxParser *parser = LXJS_GET_PARSER_FROM_CONTEXT(context);
 
@@ -415,9 +361,9 @@ void XmlSaxParser::warning(void *context, const char *msg, ...)
 
   va_list args;
   va_start(args, msg);
-  if (vasprintf(&message, msg, args) >= 0)
-  {
-    Local<Value> argv[1] = {Nan::New<String>((const char *)message).ToLocalChecked()};
+  if (vasprintf(&message, msg, args) >= 0) {
+    Local<Value> argv[1] = {
+        Nan::New<String>((const char *)message).ToLocalChecked()};
     parser->Callback("warning", 1, argv);
   }
 
@@ -425,8 +371,7 @@ void XmlSaxParser::warning(void *context, const char *msg, ...)
   free(message);
 }
 
-void XmlSaxParser::error(void *context, const char *msg, ...)
-{
+void XmlSaxParser::error(void *context, const char *msg, ...) {
   Nan::HandleScope scope;
   libxmljs::XmlSaxParser *parser = LXJS_GET_PARSER_FROM_CONTEXT(context);
 
@@ -434,9 +379,9 @@ void XmlSaxParser::error(void *context, const char *msg, ...)
 
   va_list args;
   va_start(args, msg);
-  if (vasprintf(&message, msg, args) >= 0)
-  {
-    Local<Value> argv[1] = {Nan::New<String>((const char *)message).ToLocalChecked()};
+  if (vasprintf(&message, msg, args) >= 0) {
+    Local<Value> argv[1] = {
+        Nan::New<String>((const char *)message).ToLocalChecked()};
     parser->Callback("error", 1, argv);
   }
 
@@ -444,24 +389,20 @@ void XmlSaxParser::error(void *context, const char *msg, ...)
   free(message);
 }
 
-void XmlSaxParser::Initialize(Local<Object> target)
-{
+void XmlSaxParser::Initialize(Local<Object> target) {
   Nan::HandleScope scope;
 
   emit_symbol.Reset(Nan::New<String>(EMIT_SYMBOL_STRING).ToLocalChecked());
 
   // SAX Parser
-  Local<FunctionTemplate> parser_t =
-      Nan::New<FunctionTemplate>(NewParser);
+  Local<FunctionTemplate> parser_t = Nan::New<FunctionTemplate>(NewParser);
 
   Nan::Persistent<FunctionTemplate> sax_parser_template;
   sax_parser_template.Reset(parser_t);
 
   parser_t->InstanceTemplate()->SetInternalFieldCount(1);
 
-  Nan::SetPrototypeMethod(parser_t,
-                          "parseString",
-                          XmlSaxParser::ParseString);
+  Nan::SetPrototypeMethod(parser_t, "parseString", XmlSaxParser::ParseString);
 
   Nan::Set(target, Nan::New<String>("SaxParser").ToLocalChecked(),
            Nan::GetFunction(parser_t).ToLocalChecked());
@@ -475,9 +416,7 @@ void XmlSaxParser::Initialize(Local<Object> target)
 
   push_parser_t->InstanceTemplate()->SetInternalFieldCount(1);
 
-  Nan::SetPrototypeMethod(push_parser_t,
-                          "push",
-                          XmlSaxParser::Push);
+  Nan::SetPrototypeMethod(push_parser_t, "push", XmlSaxParser::Push);
 
   Nan::Set(target, Nan::New<String>("SaxPushParser").ToLocalChecked(),
            Nan::GetFunction(push_parser_t).ToLocalChecked());

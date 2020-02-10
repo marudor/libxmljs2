@@ -2,19 +2,18 @@
 #ifndef SRC_XML_TEXTWRITER_H_
 #define SRC_XML_TEXTWRITER_H_
 
-#include <node.h>
+#include "libxmljs.h"
 #include <libxml/xmlwriter.h>
+#include <node.h>
 
 namespace libxmljs {
 
 class XmlTextWriter : public Nan::ObjectWrap {
-  public:
-
+public:
   XmlTextWriter();
   virtual ~XmlTextWriter();
 
-  static void
-  Initialize(v8::Local<v8::Object> target);
+  static void Initialize(v8::Local<v8::Object> target);
 
   static NAN_METHOD(NewTextWriter);
 
@@ -46,15 +45,18 @@ class XmlTextWriter : public Nan::ObjectWrap {
 
   static NAN_METHOD(WriteString);
 
+  static NAN_METHOD(OutputMemory);
 
-  private:
+private:
   xmlTextWriterPtr textWriter;
-  xmlBufferPtr  writerBuffer;
+  xmlBufferPtr writerBuffer;
+
+  void clearBuffer();
 
   bool is_open();
 
   bool is_inmemory();
 };
-}
+} // namespace libxmljs
 
-#endif  // SRC_XML_TEXTWRITER_H_
+#endif // SRC_XML_TEXTWRITER_H_

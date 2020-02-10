@@ -2,33 +2,33 @@
 #ifndef SRC_LIBXMLJS_H_
 #define SRC_LIBXMLJS_H_
 
-#include <v8.h>
-#include <node.h>
 #include "nan.h"
+#include <node.h>
+#include <v8.h>
 
-#define LIBXMLJS_ARGUMENT_TYPE_CHECK(arg, type, err)                          \
-  if (!arg->type()) {                                                         \
-    return Nan::ThrowTypeError(err);                                            \
+#define LIBXMLJS_ARGUMENT_TYPE_CHECK(arg, type, err)                           \
+  if (!arg->type()) {                                                          \
+    return Nan::ThrowTypeError(err);                                           \
   }
 
-#define NAN_CONSTRUCTOR_CHECK(name) \
-if (!info.IsConstructCall()) { \
-  Nan::ThrowTypeError("Class constructor " #name " cannot be invoked without 'new'"); \
-  return; \
-}
+#define NAN_CONSTRUCTOR_CHECK(name)                                            \
+  if (!info.IsConstructCall()) {                                               \
+    Nan::ThrowTypeError("Class constructor " #name                             \
+                        " cannot be invoked without 'new'");                   \
+    return;                                                                    \
+  }
 
-#define DOCUMENT_ARG_CHECK \
-if (info.Length() == 0 || info[0]->IsNullOrUndefined()) { \
-  Nan::ThrowError("document argument required"); \
-  return; \
-} \
-Local<Object> doc = Nan::To<Object>(info[0]).ToLocalChecked(); \
-if (!XmlDocument::constructor_template.Get(Nan::GetCurrentContext()->GetIsolate())->HasInstance(doc)) { \
-  Nan::ThrowError("document argument must be an instance of Document"); \
-  return; \
-}
-
-
+#define DOCUMENT_ARG_CHECK                                                     \
+  if (info.Length() == 0 || info[0]->IsNullOrUndefined()) {                    \
+    Nan::ThrowError("document argument required");                             \
+    return;                                                                    \
+  }                                                                            \
+  Local<Object> doc = Nan::To<Object>(info[0]).ToLocalChecked();               \
+  if (!XmlDocument::constructor_template.Get(Isolate::GetCurrent())            \
+           ->HasInstance(doc)) {                                               \
+    Nan::ThrowError("document argument must be an instance of Document");      \
+    return;                                                                    \
+  }
 
 namespace libxmljs {
 
@@ -41,13 +41,13 @@ static const bool debugging = false;
 // Ensure that libxml is properly initialised and destructed at shutdown
 class LibXMLJS {
 public:
-    LibXMLJS();
-    virtual ~LibXMLJS();
+  LibXMLJS();
+  virtual ~LibXMLJS();
 
 private:
-    static LibXMLJS instance;
+  static LibXMLJS instance;
 };
 
-}  // namespace libxmljs
+} // namespace libxmljs
 
-#endif  // SRC_LIBXMLJS_H_
+#endif // SRC_LIBXMLJS_H_

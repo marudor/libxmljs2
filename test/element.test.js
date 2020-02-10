@@ -2,7 +2,7 @@ const libxml = require('../index');
 
 describe('element', () => {
   it('new', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = libxml.Element(doc, 'name1');
 
     doc.root(elem);
@@ -11,7 +11,7 @@ describe('element', () => {
   });
 
   it('newWithContent', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = libxml.Element(doc, 'name1', 'content && more content <>');
 
     doc.root(elem);
@@ -21,7 +21,7 @@ describe('element', () => {
   });
 
   it('setters', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name1');
 
     // change content
@@ -36,7 +36,7 @@ describe('element', () => {
   });
 
   it('getters', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name1');
 
     expect(elem.type()).toBe('element');
@@ -44,7 +44,7 @@ describe('element', () => {
   });
 
   it('remove', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name1');
     const child = elem.node('child');
 
@@ -55,7 +55,7 @@ describe('element', () => {
   });
 
   it('toString', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name1');
 
     expect(elem.toString()).toBe('<name1/>');
@@ -76,7 +76,7 @@ describe('element', () => {
   });
 
   it('path', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const root = doc.node('root');
     const gchild = root.node('child').node('grandchild');
     const sibling = root.node('child');
@@ -86,7 +86,7 @@ describe('element', () => {
   });
 
   it('move', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name1');
     const child = elem.node('child');
 
@@ -101,7 +101,7 @@ describe('element', () => {
   });
 
   it('addChild', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name1');
     const newChild = libxml.Element(doc, 'new-child');
 
@@ -110,7 +110,7 @@ describe('element', () => {
   });
 
   it('add prev sibling', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name1');
 
     elem.node('child1');
@@ -127,7 +127,7 @@ describe('element', () => {
   });
 
   it('add next sibling', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name1');
 
     const child1 = elem.node('child1');
@@ -145,14 +145,14 @@ describe('element', () => {
   });
 
   it('import', () => {
-    let doc = libxml.Document();
+    let doc = new libxml.Document();
     const elem = doc.node('name1');
 
     const child1 = elem.node('child1');
 
     doc = child1.doc();
 
-    const newdoc = libxml.Document();
+    const newdoc = new libxml.Document();
 
     newdoc.node('newdoc');
 
@@ -170,7 +170,7 @@ describe('element', () => {
   });
 
   it('clone', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('child');
     const elem2 = elem.clone();
 
@@ -248,7 +248,7 @@ describe('element', () => {
   });
 
   it('add cdata', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const element = new libxml.Element(doc, 'name', 'content');
     const cdataResult = element.cdata('cdata');
 

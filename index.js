@@ -42,4 +42,4 @@ module.exports.memoryUsage = bindings.xmlMemUsed;
 
 module.exports.nodeCount = bindings.xmlNodeCount;
 
-module.exports.TextWriter = require('./lib/textwriter.js');
+module.exports.TextWriter = bindings.TextWriter;

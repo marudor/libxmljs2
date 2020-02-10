@@ -1,6 +1,13 @@
 const libxml = require('../index');
 
 describe('xml textwriter', () => {
+  describe('error handling', () => {
+    it('endElement should throw an error if underlying method returned -1', () => {
+      const writer = new libxml.TextWriter();
+
+      expect(() => writer.endElement()).toThrow('Failed to end element');
+    });
+  });
   it('should write an XML preamble to memory', () => {
     let writer;
     // eslint-disable-next-line no-unused-vars
@@ -32,6 +39,68 @@ describe('xml textwriter', () => {
     expect(output).toBe(
       '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n\n'
     );
+  });
+
+  describe('standalone handling', () => {
+    it('true === yes', () => {
+      const writer = new libxml.TextWriter();
+
+      writer.startDocument('1.0', 'UTF-8', true);
+      writer.endDocument();
+      expect(writer.outputMemory()).toBe(
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n\n'
+      );
+    });
+
+    it('false === no', () => {
+      const writer = new libxml.TextWriter();
+
+      writer.startDocument('1.0', 'UTF-8', false);
+      writer.endDocument();
+      expect(writer.outputMemory()).toBe(
+        '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n\n'
+      );
+    });
+
+    it('default === no', () => {
+      const writer = new libxml.TextWriter();
+
+      writer.startDocument('1.0', 'UTF-8', false);
+      writer.endDocument();
+      expect(writer.outputMemory()).toBe(
+        '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n\n'
+      );
+    });
+
+    it('falsy === NULL', () => {
+      const writer = new libxml.TextWriter();
+
+      writer.startDocument('1.0', 'UTF-8', 0);
+      writer.endDocument();
+      expect(writer.outputMemory()).toBe(
+        '<?xml version="1.0" encoding="UTF-8"?>\n\n'
+      );
+    });
+
+    it('missing === NULL', () => {
+      const writer = new libxml.TextWriter();
+
+      writer.startDocument('1.0', 'UTF-8');
+      writer.endDocument();
+      expect(writer.outputMemory()).toBe(
+        '<?xml version="1.0" encoding="UTF-8"?>\n\n'
+      );
+    });
+
+    it('undefined === NULL', () => {
+      const writer = new libxml.TextWriter();
+
+      writer.startDocument('1.0', 'UTF-8', undefined);
+      writer.endDocument();
+      expect(writer.outputMemory()).toBe(
+        '<?xml version="1.0" encoding="UTF-8"?>\n\n'
+      );
+    });
   });
 
   it('should write elements without namespace', () => {

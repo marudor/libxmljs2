@@ -33,7 +33,7 @@ describe('ref integrity', () => {
   }
 
   it('gc', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
 
     doc
       .node('root')

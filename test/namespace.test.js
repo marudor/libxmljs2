@@ -2,7 +2,7 @@ const libxml = require('../index');
 
 describe('namespace', () => {
   it('create', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name1');
     const ns = elem.defineNamespace('http://my-namespace.com');
 
@@ -13,7 +13,7 @@ describe('namespace', () => {
   });
 
   it('set', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name1');
 
     // this will set a namespace on the node
@@ -26,7 +26,7 @@ describe('namespace', () => {
   });
 
   it('with prefix', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name1');
     const ns = elem.defineNamespace('pref', 'http://my-namespace.com');
 
@@ -76,7 +76,7 @@ describe('namespace', () => {
   });
 
   it('existing', () => {
-    let doc = libxml.Document();
+    let doc = new libxml.Document();
     let elem = doc.node('name1');
     let ns = elem.defineNamespace('http://my-namespace.com');
 
@@ -84,7 +84,7 @@ describe('namespace', () => {
     expect(ns).toBeTruthy();
     expect(elem.namespace()).toBe(ns);
 
-    doc = libxml.Document();
+    doc = new libxml.Document();
     elem = doc.node('name1');
     ns = elem.defineNamespace('pref', 'http://my-namespace.com');
 
@@ -93,7 +93,7 @@ describe('namespace', () => {
     expect(elem.namespace()).toBe(ns);
   });
   it('remove', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = doc.node('name1');
     const ns = elem.namespace('http://my-namespace.com').namespace();
 
@@ -104,7 +104,7 @@ describe('namespace', () => {
   });
 
   it('all', () => {
-    const document = libxml.Document();
+    const document = new libxml.Document();
     const root = document.node('root');
     const list = [];
 
@@ -124,14 +124,14 @@ describe('namespace', () => {
   });
 
   it('empty', () => {
-    const document = libxml.Document();
+    const document = new libxml.Document();
     const root = document.node('root');
 
     expect(0).toBe(root.namespaces().length);
   });
 
   it('nested', () => {
-    const document = libxml.Document();
+    const document = new libxml.Document();
     const root = document.node('root');
 
     root.namespace('com', 'http://example.com');

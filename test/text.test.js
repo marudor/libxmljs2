@@ -2,7 +2,7 @@ const libxml = require('../index');
 
 describe('text', () => {
   it('invalid_new', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
 
     expect(() => new libxml.Text(undefined, '')).toThrow(
       'document argument required'
@@ -20,7 +20,7 @@ describe('text', () => {
   });
 
   it('new', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = new libxml.Text(doc, 'node content');
 
     doc.root(elem);
@@ -28,7 +28,7 @@ describe('text', () => {
   });
 
   it('setters', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = new libxml.Text(doc, 'node content');
 
     // change content
@@ -38,7 +38,7 @@ describe('text', () => {
   });
 
   it('getters', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = new libxml.Text(doc, 'getters');
 
     expect(() => {
@@ -49,7 +49,7 @@ describe('text', () => {
   });
 
   it('remove', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = new libxml.Text(doc, 'node content');
 
     doc.root(elem);
@@ -61,7 +61,7 @@ describe('text', () => {
   });
 
   it('toString', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const elem = new libxml.Text(doc, 'node content');
 
     doc.root(elem);
@@ -69,7 +69,7 @@ describe('text', () => {
   });
 
   it('addChild', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
 
     const newTextNode = new libxml.Text(doc, 'my text');
     const newElement = new libxml.Element(doc, 'div');
@@ -88,7 +88,7 @@ describe('text', () => {
   });
 
   it('addSiblings', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
 
     const parentNode = new libxml.Element(doc, 'div');
     const child = parentNode.node('child', "i'm a child");

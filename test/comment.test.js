@@ -3,7 +3,7 @@ const libxml = require('../index');
 describe('comment', () => {
   describe('throws', () => {
     it('throws without new', () => {
-      const doc = libxml.Document();
+      const doc = new libxml.Document();
 
       expect(() => libxml.Comment(doc, 'Test')).toThrow(
         "Class constructor Comment cannot be invoked without 'new'"
@@ -23,7 +23,7 @@ describe('comment', () => {
       );
     });
     it('throw if doc is wrong object', () => {
-      const doc = libxml.Document();
+      const doc = new libxml.Document();
       const text = new libxml.Text(doc, 'test Text');
 
       expect(() => new libxml.Comment(text)).toThrow(
@@ -32,7 +32,7 @@ describe('comment', () => {
     });
   });
   it('new', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const comm = new libxml.Comment(doc, 'comment1');
 
     doc.root(comm);
@@ -40,7 +40,7 @@ describe('comment', () => {
   });
 
   it('text', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const comm = new libxml.Comment(doc);
 
     comm.text('comment2');
@@ -48,7 +48,7 @@ describe('comment', () => {
   });
 
   it('textWithSpecialCharacters', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const comm = new libxml.Comment(doc);
     const theText = 'my comment <has> special ch&r&cters';
 
@@ -57,7 +57,7 @@ describe('comment', () => {
   });
 
   it('toStringWithSpecialCharacters', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const comm = new libxml.Comment(doc);
     const theText = 'my comment <has> special ch&r&cters';
 

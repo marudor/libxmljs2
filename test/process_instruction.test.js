@@ -22,7 +22,7 @@ describe('pi', () => {
     );
   });
   it('new', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const pi = new libxml.ProcessingInstruction(doc, 'mypi', 'mycontent');
 
     doc.root(new libxml.Element(doc, 'myelem'));
@@ -34,7 +34,7 @@ describe('pi', () => {
   });
 
   it('name', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const pi = new libxml.ProcessingInstruction(doc, 'mypi');
 
     pi.name('mynewpi');
@@ -42,7 +42,7 @@ describe('pi', () => {
   });
 
   it('text', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const pi = new libxml.ProcessingInstruction(doc, 'mypi');
 
     pi.text('pi3');

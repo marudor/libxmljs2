@@ -9,16 +9,15 @@
 namespace libxmljs {
 
 class XmlXpathContext {
-  public:
-
-  explicit XmlXpathContext(xmlNode* node);
+public:
+  explicit XmlXpathContext(xmlNode *node);
   ~XmlXpathContext();
 
-  void register_ns(const xmlChar* prefix, const xmlChar* uri);
-  v8::Local<v8::Value> evaluate(const xmlChar* xpath);
+  void register_ns(const xmlChar *prefix, const xmlChar *uri);
+  v8::Local<v8::Value> evaluate(const xmlChar *xpath);
 
   xmlXPathContext *ctxt;
 };
-}  // namespace libxmljs
+} // namespace libxmljs
 
-#endif  // SRC_XML_XPATH_CONTEXT_H_
+#endif // SRC_XML_XPATH_CONTEXT_H_

@@ -4,37 +4,35 @@
 
 #include <node.h>
 
-#include <libxml/tree.h>
 #include "nan.h"
+#include <libxml/tree.h>
 
-namespace libxmljs
-{
+namespace libxmljs {
 
-class XmlNamespace : public Nan::ObjectWrap
-{
+class XmlNamespace : public Nan::ObjectWrap {
 public:
-    xmlNs *xml_obj;
+  xmlNs *xml_obj;
 
-    xmlDoc *context; // reference-managed context
+  xmlDoc *context; // reference-managed context
 
-    static void Initialize(v8::Local<v8::Object> target);
-    static Nan::Persistent<v8::FunctionTemplate> constructor_template;
+  static void Initialize(v8::Local<v8::Object> target);
+  static Nan::Persistent<v8::FunctionTemplate> constructor_template;
 
-    explicit XmlNamespace(xmlNs *ns);
-    XmlNamespace(xmlNs *node, const char *prefix, const char *href);
-    ~XmlNamespace();
+  explicit XmlNamespace(xmlNs *ns);
+  XmlNamespace(xmlNs *node, const char *prefix, const char *href);
+  ~XmlNamespace();
 
-    static v8::Local<v8::Object> New(xmlNs *ns);
+  static v8::Local<v8::Object> New(xmlNs *ns);
 
 protected:
-    static NAN_METHOD(New);
-    static NAN_METHOD(Href);
-    static NAN_METHOD(Prefix);
+  static NAN_METHOD(New);
+  static NAN_METHOD(Href);
+  static NAN_METHOD(Prefix);
 
-    v8::Local<v8::Value> get_href();
-    v8::Local<v8::Value> get_prefix();
+  v8::Local<v8::Value> get_href();
+  v8::Local<v8::Value> get_prefix();
 
-    friend class Node;
+  friend class Node;
 };
 } // namespace libxmljs
 

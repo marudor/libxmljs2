@@ -3,32 +3,27 @@
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
 
-#include "xml_xpath_context.h"
 #include "xml_element.h"
+#include "xml_xpath_context.h"
 
 using namespace v8;
 
 namespace libxmljs {
 
-XmlXpathContext::XmlXpathContext(xmlNode* node) {
+XmlXpathContext::XmlXpathContext(xmlNode *node) {
   ctxt = xmlXPathNewContext(node->doc);
   ctxt->node = node;
 }
 
-XmlXpathContext::~XmlXpathContext() {
-  xmlXPathFreeContext(ctxt);
-}
+XmlXpathContext::~XmlXpathContext() { xmlXPathFreeContext(ctxt); }
 
-void
-XmlXpathContext::register_ns(const xmlChar* prefix,
-                             const xmlChar* uri) {
+void XmlXpathContext::register_ns(const xmlChar *prefix, const xmlChar *uri) {
   xmlXPathRegisterNs(ctxt, prefix, uri);
 }
 
-Local<Value>
-XmlXpathContext::evaluate(const xmlChar* xpath) {
+Local<Value> XmlXpathContext::evaluate(const xmlChar *xpath) {
   Nan::EscapableHandleScope scope;
-  xmlXPathObject* xpathobj = xmlXPathEval(xpath, ctxt);
+  xmlXPathObject *xpathobj = xmlXPathEval(xpath, ctxt);
   Local<Value> res;
 
   if (xpathobj) {
@@ -58,7 +53,8 @@ XmlXpathContext::evaluate(const xmlChar* xpath) {
 
     case XPATH_STRING:
       res = Nan::New<String>((const char *)xpathobj->stringval,
-                            xmlStrlen(xpathobj->stringval)).ToLocalChecked();
+                             xmlStrlen(xpathobj->stringval))
+                .ToLocalChecked();
       break;
 
     default:
@@ -71,4 +67,4 @@ XmlXpathContext::evaluate(const xmlChar* xpath) {
   return scope.Escape(res);
 }
 
-}  // namespace libxmljs
+} // namespace libxmljs

@@ -53,7 +53,7 @@ describe('document', () => {
   });
 
   it('setDtd', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
 
     doc.setDtd('html');
     expect('<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE html>\n').toBe(
@@ -82,40 +82,40 @@ describe('document', () => {
   });
 
   it('blank', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
 
     expect('1.0').toBe(doc.version());
     expect('utf8').toBe(doc.encoding());
   });
 
   it('version', () => {
-    const doc = libxml.Document('2.0');
+    const doc = new libxml.Document('2.0');
 
     expect('2.0').toBe(doc.version());
     expect('utf8').toBe(doc.encoding());
   });
 
   it('type', () => {
-    const doc = libxml.Document('2.0');
+    const doc = new libxml.Document('2.0');
 
     expect('document').toBe(doc.type());
   });
 
   it('full', () => {
-    const doc = libxml.Document('2.0', 'UTF-8');
+    const doc = new libxml.Document('2.0', 'UTF-8');
 
     expect('2.0').toBe(doc.version());
     expect('UTF-8').toBe(doc.encoding());
   });
 
   it('null root', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
 
     expect(doc.root()).toBeNull();
   });
 
   it('new root', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const root = doc.node('root');
 
     expect('root').toBe(root.name());
@@ -129,7 +129,7 @@ describe('document', () => {
   });
 
   it('one child', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
 
     doc
       .node('root')
@@ -142,7 +142,7 @@ describe('document', () => {
   });
 
   it('root children', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
 
     doc
       .node('root')
@@ -154,7 +154,7 @@ describe('document', () => {
   });
 
   it('xpath', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
 
     doc
       .node('root')
@@ -165,7 +165,7 @@ describe('document', () => {
   });
 
   it('xpath child', () => {
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
 
     doc
       .node('root')
@@ -188,7 +188,7 @@ describe('document', () => {
       '',
     ].join('\n');
 
-    const doc = libxml.Document();
+    const doc = new libxml.Document();
     const root = doc.node('root');
 
     root
@@ -332,6 +332,10 @@ describe('document', () => {
     const xmlDocValid = libxml.parseXml(xml_valid);
     const xmlDocInvalid = libxml.parseXml(xml_invalid);
 
+    expect(() => xmlDocValid.rngValidate()).toThrow('Must pass xsd');
+    expect(() => xmlDocValid.rngValidate(undefined)).toThrow('Must pass xsd');
+    expect(() => xmlDocValid.rngValidate(null)).toThrow('Must pass xsd');
+    expect(() => xmlDocValid.rngValidate(0)).toThrow('Must pass XmlDocument');
     expect(xmlDocValid.rngValidate(rngDoc)).toBe(true);
     expect(xmlDocValid.validationErrors.length).toBe(0);
 

@@ -6,11 +6,9 @@
 
 #include "libxmljs.h"
 
-namespace libxmljs
-{
+namespace libxmljs {
 
-class XmlDocument : public Nan::ObjectWrap
-{
+class XmlDocument : public Nan::ObjectWrap {
 
 public:
   // used to create new instanced of a document handle
@@ -33,10 +31,7 @@ public:
   using Nan::ObjectWrap::Unref;
 
   // expose ObjectWrap::refs_ (for testing)
-  int refs()
-  {
-    return refs_;
-  }
+  int refs() { return refs_; }
 
 protected:
   // initialize a new document
@@ -62,6 +57,8 @@ protected:
   // Static member variables
   static const int DEFAULT_PARSING_OPTS;
   static const int EXCLUDE_IMPLIED_ELEMENTS;
+
+  void setEncoding(const char *encoding);
 };
 
 } // namespace libxmljs
