@@ -156,7 +156,7 @@ export class Element extends Node {
   /**
    * @return The original element, not the child.
    */
-  addChild(child: Element): this;
+  addChild(child: Node): this;
 
   prevElement(): Element | null;
   nextElement(): Element | null;
