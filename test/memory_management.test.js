@@ -37,7 +37,7 @@ describe('memory management', () => {
   }
 
   it('inaccessible document freed', () => {
-    return new Promise(done => {
+    return new Promise((done) => {
       const xml_memory_before_document = libxml.memoryUsage();
 
       for (let i = 0; i < 10; i += 1) {
@@ -52,7 +52,7 @@ describe('memory management', () => {
   });
 
   it('inaccessible document freed when node freed', () =>
-    new Promise(done => {
+    new Promise((done) => {
       const xml_memory_before_document = libxml.memoryUsage();
       let nodes = [];
 
@@ -68,7 +68,7 @@ describe('memory management', () => {
     }));
 
   it('inaccessible document freed after middle nodes proxies', () =>
-    new Promise(done => {
+    new Promise((done) => {
       const xml_memory_before_document = libxml.memoryUsage();
       let doc = makeDocument();
       // eslint-disable-next-line no-unused-vars
@@ -85,7 +85,7 @@ describe('memory management', () => {
     }));
 
   it('inaccessible tree freed', () =>
-    new Promise(done => {
+    new Promise((done) => {
       const doc = makeDocument();
       const xml_memory_after_document = libxml.memoryUsage();
 
@@ -98,7 +98,7 @@ describe('memory management', () => {
     }));
 
   it('namespace list freed', () => {
-    return new Promise(done => {
+    return new Promise((done) => {
       const doc = makeDocument();
       const el = doc.get('//center');
 

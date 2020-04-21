@@ -158,10 +158,7 @@ describe('namespace', () => {
     const div = doc.get('//xmlns:div', 'http://www.w3.org/1999/xhtml');
 
     expect(div != null).toBeTruthy();
-    const exp = doc
-      .root()
-      .child(1)
-      .child(0);
+    const exp = doc.root().child(1).child(0);
 
     expect(exp != null).toBeTruthy();
     expect(exp.toString()).toBe(div.toString());
@@ -183,10 +180,7 @@ describe('namespace', () => {
     });
 
     expect(div != null).toBeTruthy();
-    const exp = doc
-      .root()
-      .child(1)
-      .child(0);
+    const exp = doc.root().child(1).child(0);
 
     expect(exp != null).toBeTruthy();
     expect(exp.toString()).toBe(div.toString());
@@ -205,7 +199,7 @@ describe('namespace', () => {
 
     expect(decls).toBeTruthy();
     expect(decls.length).toBe(2);
-    decls.forEach(n => {
+    decls.forEach((n) => {
       if (n.prefix() == null) {
         expect(n.href()).toBe('urn:example');
       } else if (n.prefix() === 'ex1') {

@@ -39,10 +39,7 @@ describe('node attributes', () => {
 
     expect(elem.attrs()).toEqual([]);
 
-    elem
-      .attr({ foo: 'bar' })
-      .attr({ bar: 'baz' })
-      .attr({ baz: 'foo' });
+    elem.attr({ foo: 'bar' }).attr({ bar: 'baz' }).attr({ baz: 'foo' });
 
     const attrs = [elem.attr('foo'), elem.attr('bar'), elem.attr('baz')];
 

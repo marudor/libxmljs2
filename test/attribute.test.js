@@ -35,25 +35,12 @@ describe('attribute', () => {
 
     expect('attr-one-key').toBe(node.attr('attr-one-key').name());
     expect('attr-one-value').toBe(node.attr('attr-one-key').value());
-    expect('node').toBe(
-      node
-        .attr('attr-one-key')
-        .node()
-        .name()
-    );
+    expect('node').toBe(node.attr('attr-one-key').node().name());
 
     // siblings
-    expect('attr-one-key').toBe(
-      node
-        .attr('attr-two-key')
-        .prevSibling()
-        .name()
-    );
+    expect('attr-one-key').toBe(node.attr('attr-two-key').prevSibling().name());
     expect('attr-three-key').toBe(
-      node
-        .attr('attr-two-key')
-        .nextSibling()
-        .name()
+      node.attr('attr-two-key').nextSibling().name()
     );
   });
 

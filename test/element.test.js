@@ -160,12 +160,7 @@ describe('element', () => {
 
     expect(newdoc).toBeTruthy();
     expect(doc).not.toBe(newdoc);
-    expect(
-      newdoc
-        .root()
-        .childNodes()[0]
-        .name()
-    ).toBe('child1');
+    expect(newdoc.root().childNodes()[0].name()).toBe('child1');
     expect(elem.childNodes()[0]).toBe(child1); // child1 is the the first child of elem
   });
 
@@ -187,7 +182,7 @@ describe('element', () => {
     const node = doc.get('node');
     const attrs = node.attrs();
 
-    attrs.forEach(attr => {
+    attrs.forEach((attr) => {
       const name = attr.name();
       const ns = attr.namespace();
 
@@ -221,12 +216,7 @@ describe('element', () => {
     bar.replace(enchant.root());
     expect('<foo>some <enchanted/> evening</foo>').toBe(doc.root().toString());
     expect(3).toBe(doc.root().childNodes().length);
-    expect(
-      doc
-        .root()
-        .childNodes()[1]
-        .name()
-    ).toBe('enchanted');
+    expect(doc.root().childNodes()[1].name()).toBe('enchanted');
   });
 
   it('add child merge text', () => {

@@ -29,6 +29,10 @@ stages:
     - yarn test
     - node-pre-gyp package 2>&1
 
+node-14:
+  <<: *glibc
+  image: node:14
+
 node-13:
   <<: *glibc
   image: node:13
@@ -48,6 +52,10 @@ node-10:
 node-13-alpine:
   <<: *muslc
   image: node:13-alpine
+
+node-14-alpine:
+  <<: *muslc
+  image: node:14-alpine
 
 node-12-alpine:
   <<: *muslc

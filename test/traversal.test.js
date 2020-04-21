@@ -54,30 +54,14 @@ describe('traversal', () => {
 
     expect(doc.child(0).doc()).toBe(doc);
     expect(doc.child(1).doc()).toBe(doc);
-    expect(
-      doc
-        .child(0)
-        .child(0)
-        .doc()
-    ).toBe(doc);
+    expect(doc.child(0).child(0).doc()).toBe(doc);
     expect(doc.root().parent()).toBe(doc);
 
     // down and back up
-    expect(
-      doc
-        .child(0)
-        .child(0)
-        .parent()
-        .name()
-    ).toBe('child');
+    expect(doc.child(0).child(0).parent().name()).toBe('child');
 
     // propertly access inner nodes
-    expect(
-      doc
-        .child(0)
-        .child(0)
-        .name()
-    ).toBe('grandchild');
+    expect(doc.child(0).child(0).name()).toBe('grandchild');
 
     // sibling nodes
     expect(doc.child(1).name()).toBe('sibling');

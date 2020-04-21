@@ -38,22 +38,12 @@ describe('searching', () => {
 
     // nested
     expect(doc.get('child').get('@attr')).toBe(attr);
-    expect(
-      doc
-        .get('child')
-        .get('@attr')
-        .value()
-    ).toBe('val');
+    expect(doc.get('child').get('@attr').value()).toBe('val');
 
     // check again after re-parsign the doc
     doc = libxml.parseXml(doc.toString());
     expect(doc.get('//@attr').value()).toBe('val');
-    expect(
-      doc
-        .get('child')
-        .get('@attr')
-        .value()
-    ).toBe('val');
+    expect(doc.get('child').get('@attr').value()).toBe('val');
     expect(doc.get('//@attr').node()).toBe(doc.get('child'));
   });
 

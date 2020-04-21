@@ -121,21 +121,14 @@ describe('document', () => {
     expect('root').toBe(root.name());
     expect(root).toBe(doc.root());
 
-    root
-      .node('child')
-      .parent()
-      .node('child');
+    root.node('child').parent().node('child');
     expect(doc.root().name()).toBe(doc.get('/root').name());
   });
 
   it('one child', () => {
     const doc = new libxml.Document();
 
-    doc
-      .node('root')
-      .node('child-one')
-      .parent()
-      .node('child-two');
+    doc.node('root').node('child-one').parent().node('child-two');
 
     expect('child-one').toBe(doc.child(0).name());
     expect('child-two').toBe(doc.child(1).name());
@@ -144,11 +137,7 @@ describe('document', () => {
   it('root children', () => {
     const doc = new libxml.Document();
 
-    doc
-      .node('root')
-      .node('child-one')
-      .parent()
-      .node('child-two');
+    doc.node('root').node('child-one').parent().node('child-two');
     expect('child-one').toBe(doc.childNodes()[0].name());
     expect('child-two').toBe(doc.childNodes()[1].name());
   });
@@ -156,22 +145,14 @@ describe('document', () => {
   it('xpath', () => {
     const doc = new libxml.Document();
 
-    doc
-      .node('root')
-      .node('child')
-      .parent()
-      .node('child');
+    doc.node('root').node('child').parent().node('child');
     expect(2).toBe(doc.find('child').length);
   });
 
   it('xpath child', () => {
     const doc = new libxml.Document();
 
-    doc
-      .node('root')
-      .node('child-one')
-      .parent()
-      .node('child-two');
+    doc.node('root').node('child-one').parent().node('child-two');
     expect('child-one').toBe(doc.get('child-one').name());
     expect('child-two').toBe(doc.get('child-two').name());
   });

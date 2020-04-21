@@ -13,21 +13,11 @@ describe('xml parser', () => {
     expect(doc.encoding()).toBe('UTF-8');
     expect(doc.root().name()).toBe('root');
     expect(doc.get('child').name()).toBe('child');
-    expect(
-      doc
-        .get('child')
-        .get('grandchild')
-        .name()
-    ).toBe('grandchild');
+    expect(doc.get('child').get('grandchild').name()).toBe('grandchild');
     expect(doc.get('child/grandchild').text()).toBe('with love');
     expect(doc.get('sibling').name()).toBe('sibling');
     expect(doc.get('sibling').line()).toBe(6);
-    expect(
-      doc
-        .get('child')
-        .attr('to')
-        .line()
-    ).toBe(3);
+    expect(doc.get('child').attr('to').line()).toBe(3);
     expect(doc.get('sibling').text()).toBe('with content!');
     expect(doc.toString()).toBe(str);
   });

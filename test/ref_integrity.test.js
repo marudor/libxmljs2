@@ -35,23 +35,13 @@ describe('ref integrity', () => {
   it('gc', () => {
     const doc = new libxml.Document();
 
-    doc
-      .node('root')
-      .node('child')
-      .node('grandchild')
-      .parent()
-      .node('child2');
+    doc.node('root').node('child').node('grandchild').parent().node('child2');
     global.gc();
     expect(doc).toBeTruthy();
     global.gc();
     expect(doc.root()).toBeTruthy();
     global.gc();
-    expect('child').toBe(
-      doc
-        .root()
-        .childNodes()[0]
-        .name()
-    );
+    expect('child').toBe(doc.root().childNodes()[0].name());
   });
 
   it('references', () => {
@@ -75,7 +65,7 @@ describe('ref integrity', () => {
       const html = '<html><body><div><span></span></div></body></html>';
       const doc = libxml.parseHtml(html);
 
-      doc.find('//div').forEach(tag => {
+      doc.find('//div').forEach((tag) => {
         // provide a reference to childNodes so they are exposed as XmlNodes
         // and therefore subject to V8's garbage collection
         children = tag.childNodes();
