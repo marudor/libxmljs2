@@ -2,8 +2,8 @@ name: builds
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - v*
   pull_request:
     branches:
       - master
@@ -56,7 +56,7 @@ jobs:
           path: 'build/**/*.tar.gz'
   deploy:
     runs-on: ubuntu-18.04
-    needs: [alpine]
+    needs: [alpine, build]
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v2
@@ -66,10 +66,11 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           path: build
-      - run: ls -R
+      - id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
       - uses: eine/tip@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref }}
+          tag: ${{ steps.vars.outputs.tag }}
           files: |
             ./build/*/stage/marudor/libxmljs2/releases/download/*/*
