@@ -1,10 +1,5 @@
 # Libxmljs2
 
-[![Build Status](https://secure.travis-ci.org/marudor/libxmljs2.svg?branch=master)](http://travis-ci.org/marudor/libxmljs2)
-
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/vlefa3ucskt8avb8?svg=true)](https://ci.appveyor.com/project/marudor/libxmljs2/branch/master)
-
-
 LibXML bindings for [node.js](http://nodejs.org/)
 This package was forked as the original one is fairly unmaintained.
 
