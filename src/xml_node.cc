@@ -247,6 +247,12 @@ Local<Value> XmlNode::New(xmlNode *node) {
   switch (node->type) {
   case XML_ATTRIBUTE_NODE:
     return scope.Escape(XmlAttribute::New(reinterpret_cast<xmlAttr *>(node)));
+  case XML_TEXT_NODE:
+    return scope.Escape(XmlText::New(node));
+  case XML_PI_NODE:
+    return scope.Escape(XmlProcessingInstruction::New(node));
+  case XML_COMMENT_NODE:
+    return scope.Escape(XmlComment::New(node));
 
   default:
     // if we don't know how to convert to specific libxmljs wrapper,

@@ -9,9 +9,6 @@ describe('comment', () => {
         "Class constructor Comment cannot be invoked without 'new'"
       );
     });
-    it('throws without doc', () => {
-      expect(() => new libxml.Comment()).toThrow('document argument required');
-    });
     it('throws if doc is a primitive', () => {
       expect(() => new libxml.Comment('test')).toThrow(
         'document argument must be an instance of Document'

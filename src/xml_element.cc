@@ -259,14 +259,9 @@ NAN_METHOD(XmlElement::AddPrevSibling) {
         "Could not add sibling. Failed to copy node to new Document.");
   }
 
-  bool will_merge = element->prev_sibling_will_merge(imported_sibling);
-  if ((new_sibling->xml_obj == imported_sibling) && will_merge) {
-    imported_sibling =
-        xmlCopyNode(imported_sibling, 0); // merged sibling is freed, so copy it
-  }
   element->add_prev_sibling(imported_sibling);
 
-  if (!will_merge && (imported_sibling->_private != NULL)) {
+  if (imported_sibling->_private != NULL) {
     static_cast<XmlNode *>(imported_sibling->_private)->ref_wrapped_ancestor();
   }
 
@@ -287,13 +282,9 @@ NAN_METHOD(XmlElement::AddNextSibling) {
         "Could not add sibling. Failed to copy node to new Document.");
   }
 
-  bool will_merge = element->next_sibling_will_merge(imported_sibling);
-  if ((new_sibling->xml_obj == imported_sibling) && will_merge) {
-    imported_sibling = xmlCopyNode(imported_sibling, 0);
-  }
   element->add_next_sibling(imported_sibling);
 
-  if (!will_merge && (imported_sibling->_private != NULL)) {
+  if (imported_sibling->_private != NULL) {
     static_cast<XmlNode *>(imported_sibling->_private)->ref_wrapped_ancestor();
   }
 
@@ -389,7 +380,7 @@ Local<Value> XmlElement::get_child(int32_t idx) {
   if (!child)
     return scope.Escape(Nan::Null());
 
-  return scope.Escape(XmlElement::New(child));
+  return scope.Escape(XmlNode::New(child));
 }
 
 Local<Value> XmlElement::get_child_nodes() {
@@ -528,20 +519,6 @@ bool XmlElement::child_will_merge(xmlNode *child) {
   return ((child->type == XML_TEXT_NODE) && (xml_obj->last != NULL) &&
           (xml_obj->last->type == XML_TEXT_NODE) &&
           (xml_obj->last->name == child->name) && (xml_obj->last != child));
-}
-
-bool XmlElement::next_sibling_will_merge(xmlNode *child) {
-  return ((child->type == XML_TEXT_NODE) &&
-          ((xml_obj->type == XML_TEXT_NODE) ||
-           ((xml_obj->next != NULL) && (xml_obj->next->type == XML_TEXT_NODE) &&
-            (xml_obj->name == xml_obj->next->name)))); // libxml2 bug?
-}
-
-bool XmlElement::prev_sibling_will_merge(xmlNode *child) {
-  return ((child->type == XML_TEXT_NODE) &&
-          ((xml_obj->type == XML_TEXT_NODE) ||
-           ((xml_obj->prev != NULL) && (xml_obj->prev->type == XML_TEXT_NODE) &&
-            (xml_obj->name == xml_obj->prev->name))));
 }
 
 void XmlElement::Initialize(Local<Object> target) {

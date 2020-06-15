@@ -4,10 +4,12 @@ describe('text', () => {
   it('invalid_new', () => {
     const doc = new libxml.Document();
 
+    expect(() => libxml.Text(doc, '')).toThrow(
+      "Class constructor Text cannot be invoked without 'new'"
+    );
     expect(() => new libxml.Text(undefined, '')).toThrow(
       'document argument required'
     );
-    expect(() => new libxml.Text()).toThrow('document argument required');
     expect(() => new libxml.Text({}, '')).toThrow(
       'document argument must be an instance of Document'
     );

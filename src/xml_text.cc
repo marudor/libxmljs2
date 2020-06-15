@@ -24,10 +24,9 @@ NAN_METHOD(XmlText::New) {
 
   // if we were created for an existing xml node, then we don't need
   // to create a new node on the document
-  // if (info.Length() == 0)
-  // {
-  //   return info.GetReturnValue().Set(info.Holder());
-  // }
+  if (info.Length() == 0) {
+    return info.GetReturnValue().Set(info.Holder());
+  }
 
   DOCUMENT_ARG_CHECK
   if (!info[1]->IsString()) {
@@ -215,12 +214,12 @@ Local<Object> XmlText::New(xmlNode *node) {
     return scope.Escape(static_cast<XmlNode *>(node->_private)->handle());
   }
 
-  XmlText *element = new XmlText(node);
+  XmlText *text = new XmlText(node);
   Local<Object> obj =
       Nan::NewInstance(
           Nan::GetFunction(Nan::New(constructor_template)).ToLocalChecked())
           .ToLocalChecked();
-  element->Wrap(obj);
+  text->Wrap(obj);
   return scope.Escape(obj);
 }
 
@@ -267,6 +266,10 @@ void XmlText::Initialize(Local<Object> target) {
   Nan::SetPrototypeMethod(tmpl, "text", XmlText::Text);
 
   Nan::SetPrototypeMethod(tmpl, "replace", XmlText::Replace);
+
+  Nan::SetPrototypeMethod(tmpl, "addPrevSibling", XmlText::AddPrevSibling);
+
+  Nan::SetPrototypeMethod(tmpl, "addNextSibling", XmlText::AddNextSibling);
 
   Nan::Set(target, Nan::New<String>("Text").ToLocalChecked(),
            Nan::GetFunction(tmpl).ToLocalChecked());

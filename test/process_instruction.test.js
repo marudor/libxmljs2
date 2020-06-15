@@ -4,9 +4,8 @@ describe('pi', () => {
   it('invalid new', () => {
     const doc = new libxml.Document();
 
-    // expect(() => libxml.ProcessingInstruction()).toThrow('Class constructor');
-    expect(() => new libxml.ProcessingInstruction()).toThrow(
-      'document argument required'
+    expect(() => libxml.ProcessingInstruction(doc, '')).toThrow(
+      "Class constructor ProcessingInstruction cannot be invoked without 'new'"
     );
     expect(() => new libxml.ProcessingInstruction(undefined, '')).toThrow(
       'document argument required'

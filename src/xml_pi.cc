@@ -21,6 +21,12 @@ NAN_METHOD(XmlProcessingInstruction::New) {
   NAN_CONSTRUCTOR_CHECK(ProcessingInstruction)
   Nan::HandleScope scope;
 
+  // if we were created for an existing xml node, then we don't need
+  // to create a new node on the document
+  if (info.Length() == 0) {
+    return info.GetReturnValue().Set(info.Holder());
+  }
+
   DOCUMENT_ARG_CHECK
   if (!info[1]->IsString()) {
     Nan::ThrowError("name argument must be of type string");
