@@ -37,7 +37,7 @@
   "dependencies": {
     "bindings": "~1.5.0",
     "nan": "~2.14.0",
-    "node-pre-gyp": "~0.14.0"
+    "node-pre-gyp": "~0.15.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
