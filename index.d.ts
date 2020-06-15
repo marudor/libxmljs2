@@ -180,7 +180,7 @@ export class Element extends Node {
   path(): string;
 }
 
-export class Attribute extends Node {
+declare class Attribute extends Node {
   name(): string;
   node(): Element;
   value(): string;
