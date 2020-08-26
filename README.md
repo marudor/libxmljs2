@@ -35,7 +35,7 @@ console.log(child.attr('foo').value()); // prints "bar"
 
 Check out the wiki [http://github.com/marudor/libxmljs2/wiki](http://github.com/libxmljs/libxmljs2/wiki).
 
-See the [examples](https://github.com/marudor/libxmljs2/tree/master/examples) folder.
+See the [examples](https://github.com/marudor/libxmljs2/tree/main/examples) folder.
 
 ## Installation via [npm](https://npmjs.org)
 
