@@ -17,6 +17,17 @@ namespace libxmljs {
 
 Nan::Persistent<FunctionTemplate> XmlText::constructor_template;
 
+Local<Value> XmlText::get_path() {
+  Nan::EscapableHandleScope scope;
+  xmlChar *path = xmlGetNodePath(xml_obj);
+  const char *return_path = path ? reinterpret_cast<char *>(path) : "";
+  int str_len = xmlStrlen((const xmlChar *)return_path);
+  Local<String> js_obj =
+      Nan::New<String>(return_path, str_len).ToLocalChecked();
+  xmlFree(path);
+  return scope.Escape(js_obj);
+}
+
 // doc, name, content
 NAN_METHOD(XmlText::New) {
   NAN_CONSTRUCTOR_CHECK(Text)
@@ -153,6 +164,14 @@ NAN_METHOD(XmlText::Replace) {
   return info.GetReturnValue().Set(info[0]);
 }
 
+NAN_METHOD(XmlText::Path) {
+  Nan::HandleScope scope;
+  XmlText *text = Nan::ObjectWrap::Unwrap<XmlText>(info.Holder());
+  assert(text);
+
+  return info.GetReturnValue().Set(text->get_path());
+}
+
 void XmlText::set_content(const char *content) {
   xmlChar *encoded =
       xmlEncodeSpecialChars(xml_obj->doc, (const xmlChar *)content);
@@ -264,6 +283,8 @@ void XmlText::Initialize(Local<Object> target) {
   Nan::SetPrototypeMethod(tmpl, "prevElement", XmlText::PrevElement);
 
   Nan::SetPrototypeMethod(tmpl, "text", XmlText::Text);
+
+  Nan::SetPrototypeMethod(tmpl, "path", XmlText::Path);
 
   Nan::SetPrototypeMethod(tmpl, "replace", XmlText::Replace);
 
