@@ -144,4 +144,24 @@ describe('text', () => {
     expect(doc).toBe(qux.parent());
     expect('qux').toBe(qux.text());
   });
+
+  describe('path()', () => {
+    it('returns the full path of the text node', () => {
+      const str = '<foo>bar</foo>';
+      const doc = libxml.parseXml(str);
+      const bar = doc.root().childNodes()[0];
+
+      expect(bar.path()).toBe('/foo/text()');
+    })
+  })
+
+  describe('name()', () => {
+    it('returns the name of the text node', () => {
+      const str = '<foo>bar</foo>';
+      const doc = libxml.parseXml(str);
+      const bar = doc.root().childNodes()[0];
+
+      expect(bar.name()).toBe('text');
+    })
+  })
 });
