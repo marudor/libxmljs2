@@ -112,6 +112,15 @@ describe('xml parser', () => {
     expect(err.code).toBe(errorControl.code);
   });
 
+  it('text path', () => {
+    const xml = '<?xml version="1.0" encoding="utf-8"?><Name>Test</Name>';
+    const doc = libxml.parseXmlString(xml);
+    const text = doc.get('/Name').childNodes()[0];
+
+    expect(text.type()).toEqual('text');
+    expect(text.path()).toEqual('/Name/text()');
+  });
+
   it('parse_options', () => {
     function test_parser_option(input, options, expected) {
       let output = libxml.parseXml(input, options).toString();
