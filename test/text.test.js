@@ -152,8 +152,8 @@ describe('text', () => {
       const bar = doc.root().childNodes()[0];
 
       expect(bar.path()).toBe('/foo/text()');
-    })
-  })
+    });
+  });
 
   describe('name()', () => {
     it('returns the name of the text node', () => {
@@ -162,6 +162,6 @@ describe('text', () => {
       const bar = doc.root().childNodes()[0];
 
       expect(bar.name()).toBe('text');
-    })
-  })
+    });
+  });
 });

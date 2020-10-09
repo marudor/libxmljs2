@@ -179,9 +179,6 @@ NAN_METHOD(XmlText::Name) {
 
   if (info.Length() == 0)
     return info.GetReturnValue().Set(text->get_name());
-
-  Nan::Utf8String name(Nan::To<String>(info[0]).ToLocalChecked());
-  text->set_name(*name);
   return info.GetReturnValue().Set(info.Holder());
 }
 
