@@ -43,10 +43,6 @@ describe('text', () => {
     const doc = new libxml.Document();
     const elem = new libxml.Text(doc, 'getters');
 
-    expect(() => {
-      elem.name();
-    }).toThrow();
-
     expect(elem.type()).toBe('text');
   });
 
