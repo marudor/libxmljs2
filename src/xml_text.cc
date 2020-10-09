@@ -172,6 +172,19 @@ NAN_METHOD(XmlText::Path) {
   return info.GetReturnValue().Set(text->get_path());
 }
 
+NAN_METHOD(XmlText::Name) {
+  Nan::HandleScope scope;
+  XmlText *text = Nan::ObjectWrap::Unwrap<XmlText>(info.Holder());
+  assert(text);
+
+  if (info.Length() == 0)
+    return info.GetReturnValue().Set(text->get_name());
+
+  Nan::Utf8String name(Nan::To<String>(info[0]).ToLocalChecked());
+  text->set_name(*name);
+  return info.GetReturnValue().Set(info.Holder());
+}
+
 void XmlText::set_content(const char *content) {
   xmlChar *encoded =
       xmlEncodeSpecialChars(xml_obj->doc, (const xmlChar *)content);
@@ -190,6 +203,15 @@ Local<Value> XmlText::get_content() {
   }
 
   return scope.Escape(Nan::New<String>("").ToLocalChecked());
+}
+
+Local<Value> XmlText::get_name() {
+  Nan::EscapableHandleScope scope;
+  if (xml_obj->name)
+    return scope.Escape(
+        Nan::New<String>((const char *)xml_obj->name).ToLocalChecked());
+  else
+    return scope.Escape(Nan::Undefined());
 }
 
 Local<Value> XmlText::get_next_element() {
@@ -284,9 +306,11 @@ void XmlText::Initialize(Local<Object> target) {
 
   Nan::SetPrototypeMethod(tmpl, "text", XmlText::Text);
 
+  Nan::SetPrototypeMethod(tmpl, "replace", XmlText::Replace);
+
   Nan::SetPrototypeMethod(tmpl, "path", XmlText::Path);
 
-  Nan::SetPrototypeMethod(tmpl, "replace", XmlText::Replace);
+  Nan::SetPrototypeMethod(tmpl, "name", XmlText::Name);
 
   Nan::SetPrototypeMethod(tmpl, "addPrevSibling", XmlText::AddPrevSibling);
 
