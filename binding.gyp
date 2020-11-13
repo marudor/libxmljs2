@@ -12,7 +12,7 @@
       'xcode_settings': {
         'OTHER_CFLAGS': [ '-Wall' ]
       },
-      'win_delay_load_hook': 'true',
+      'win_delay_load_hook': 'false',
       'defines': ['LIBXML_XINCLUDE_ENABLED'],
       'sources': [
         'src/libxmljs.cc',
