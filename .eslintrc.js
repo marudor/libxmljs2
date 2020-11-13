@@ -5,9 +5,9 @@ module.exports = {
     es6: true,
     jest: true,
   },
-  globals: {
-  },
+  globals: {},
   rules: {
     'guard-for-in': 0,
-  }
+    'jest/no-conditional-expect': 0,
+  },
 };

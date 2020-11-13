@@ -53,7 +53,6 @@ describe('element', () => {
     child.remove();
     expect(doc.get('/name1/child')).not.toBeTruthy();
   });
-
   it('toString', () => {
     const doc = new libxml.Document();
     const elem = doc.node('name1');

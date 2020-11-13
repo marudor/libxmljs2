@@ -23,9 +23,9 @@ jobs:
       - run: yarn --frozen-lockfile
         env:
           npm_config_build_from_source: true
-      - run: yarn test
       - run: yarn lint
       - run: yarn tsd
+      - run: yarn test
       - run: yarn package
       - uses: actions/upload-artifact@v2
         with:
@@ -46,9 +46,9 @@ jobs:
       - run: yarn --frozen-lockfile
         env:
           npm_config_build_from_source: true
-      - run: yarn test
       - run: yarn lint
       - run: yarn tsd
+      - run: yarn test
       - run: yarn package
       - uses: actions/upload-artifact@v2
         with:
