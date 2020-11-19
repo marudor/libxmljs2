@@ -8,7 +8,7 @@
             "cflags": ["-Wall"],
             "xcode_settings": {"OTHER_CFLAGS": ["-Wall"]},
             "win_delay_load_hook": "false",
-            "defines": ["LIBXML_XINCLUDE_ENABLED"],
+            "defines": ["LIBXML_XINCLUDE_ENABLED", "BUILDING_NODE_EXTENSION"],
             "sources": [
                 "src/libxmljs.cc",
                 "src/xml_attribute.cc",
