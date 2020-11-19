@@ -7,7 +7,7 @@
             "include_dirs": ["vendor/libxml/include", "<!(node -e \"require('nan')\")"],
             "cflags": ["-Wall"],
             "xcode_settings": {"OTHER_CFLAGS": ["-Wall"]},
-            "win_delay_load_hook": "false",
+            "win_delay_load_hook": "true",
             "defines": ["LIBXML_XINCLUDE_ENABLED", "BUILDING_NODE_EXTENSION"],
             "sources": [
                 "src/libxmljs.cc",
