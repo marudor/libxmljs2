@@ -33,7 +33,7 @@ console.log(child.attr('foo').value()); // prints "bar"
 
 ## API and Examples
 
-Check out the wiki [http://github.com/marudor/libxmljs2/wiki](http://github.com/libxmljs/libxmljs2/wiki).
+Check out the wiki [http://github.com/marudor/libxmljs2/wiki](https://github.com/marudor/libxmljs2/wiki).
 
 See the [examples](https://github.com/marudor/libxmljs2/tree/main/examples) folder.
 
