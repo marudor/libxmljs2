@@ -53,6 +53,6 @@
     "jest": "^26.4.2",
     "jest-watch-typeahead": "^0.6.0",
     "prettier": "^2.1.1",
-    "tsd": "^0.13.1"
+    "tsd": "^0.14.0"
   }
 }
