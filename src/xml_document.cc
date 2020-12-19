@@ -9,6 +9,7 @@
 #include <libxml/HTMLparser.h>
 #include <libxml/HTMLtree.h>
 #include <libxml/relaxng.h>
+#include <libxml/schematron.h>
 #include <libxml/xinclude.h>
 #include <libxml/xmlsave.h>
 #include <libxml/xmlschemas.h>
@@ -674,6 +675,62 @@ NAN_METHOD(XmlDocument::RngValidate) {
   return info.GetReturnValue().Set(Nan::New<Boolean>(valid));
 }
 
+NAN_METHOD(XmlDocument::SchematronValidate) {
+  if (info.Length() == 0 || info[0]->IsNullOrUndefined()) {
+    Nan::ThrowError("Must pass schema");
+    return;
+  }
+
+  if (!XmlDocument::constructor_template.Get(Isolate::GetCurrent())
+           ->HasInstance(info[0])) {
+    Nan::ThrowError("Must pass XmlDocument");
+    return;
+  }
+
+  Nan::HandleScope scope;
+
+  Local<Array> errors = Nan::New<Array>();
+  xmlResetLastError();
+
+  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.Holder());
+  XmlDocument *documentSchema = Nan::ObjectWrap::Unwrap<XmlDocument>(
+      Nan::To<Object>(info[0]).ToLocalChecked());
+
+  xmlSchematronParserCtxtPtr parser_ctxt =
+      xmlSchematronNewDocParserCtxt(documentSchema->xml_obj);
+  if (parser_ctxt == NULL) {
+    return Nan::ThrowError(
+        "Could not create context for Schematron schema parser");
+  }
+
+  xmlSchematronPtr schema = xmlSchematronParse(parser_ctxt);
+  if (schema == NULL) {
+    return Nan::ThrowError("Invalid Schematron schema");
+  }
+
+  xmlSchematronValidCtxtPtr valid_ctxt = xmlSchematronNewValidCtxt(schema, XML_SCHEMATRON_OUT_ERROR);
+  if (valid_ctxt == NULL) {
+    return Nan::ThrowError(
+        "Unable to create a validation context for the Schematron schema");
+  }
+  xmlSchematronSetValidStructuredErrors(valid_ctxt, 
+                                        XmlSyntaxError::PushToArray, 
+                                        reinterpret_cast<void *>(&errors));
+
+  bool valid = xmlSchematronValidateDoc(valid_ctxt, document->xml_obj) == 0;
+
+  xmlSchematronSetValidStructuredErrors(valid_ctxt, NULL, NULL);
+  Nan::Set(info.Holder(), Nan::New<String>("validationErrors").ToLocalChecked(),
+           errors)
+      .Check();
+
+  xmlSchematronFreeValidCtxt(valid_ctxt);
+  xmlSchematronFree(schema);
+  xmlSchematronFreeParserCtxt(parser_ctxt);
+
+  return info.GetReturnValue().Set(Nan::New<Boolean>(valid));
+}
+
 /// this is a blank object with prototype methods
 /// not exposed to the user and not called from js
 NAN_METHOD(XmlDocument::New) {
@@ -724,6 +781,7 @@ void XmlDocument::Initialize(Local<Object> target) {
 
   Nan::SetPrototypeMethod(tmpl, "validate", XmlDocument::Validate);
   Nan::SetPrototypeMethod(tmpl, "rngValidate", XmlDocument::RngValidate);
+  Nan::SetPrototypeMethod(tmpl, "schematronValidate", XmlDocument::SchematronValidate);
   Nan::SetPrototypeMethod(tmpl, "_setDtd", XmlDocument::SetDtd);
   Nan::SetPrototypeMethod(tmpl, "getDtd", XmlDocument::GetDtd);
   Nan::SetPrototypeMethod(tmpl, "type", XmlDocument::type);
