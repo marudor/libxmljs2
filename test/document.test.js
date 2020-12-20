@@ -326,36 +326,36 @@ describe('document', () => {
 
   it('schematronValidate', () => {
     const sch =
-      '<schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">'+
-      '<pattern id="errors">'+
-      '<rule context="//addr">'+
-      '<assert test="state[last()=1] or @nullFlavor">All //addr elements MUST have element state.</assert>'+
-      '<assert test="streetAddressLine or @nullFlavor">All //addr elements MUST have element streetAddressLine</assert>'+
-      '</rule>'+
-      '</pattern>'+
+      '<schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">' +
+      '<pattern id="errors">' +
+      '<rule context="//addr">' +
+      '<assert test="state[last()=1] or @nullFlavor">All //addr elements MUST have element state.</assert>' +
+      '<assert test="streetAddressLine or @nullFlavor">All //addr elements MUST have element streetAddressLine</assert>' +
+      '</rule>' +
+      '</pattern>' +
       '</schema>';
 
     const xml_valid =
-      '<ClinicalDocument>'+
-      '<recordTarget>'+
-      '<patientRole>'+
-      '<addr use="H">'+
-      '<state>24</state>'+
-      '<streetAddressLine>example street</streetAddressLine>'+
-      '</addr>'+
-      '</patientRole>'+
-      '</recordTarget>'+
+      '<ClinicalDocument>' +
+      '<recordTarget>' +
+      '<patientRole>' +
+      '<addr use="H">' +
+      '<state>24</state>' +
+      '<streetAddressLine>example street</streetAddressLine>' +
+      '</addr>' +
+      '</patientRole>' +
+      '</recordTarget>' +
       '</ClinicalDocument>';
 
     const xml_invalid =
-      '<ClinicalDocument>'+
-      '<recordTarget>'+
-      '<patientRole>'+
-      '<addr use="H">'+
-      '<state>24</state>'+
-      '</addr>'+
-      '</patientRole>'+
-      '</recordTarget>'+
+      '<ClinicalDocument>' +
+      '<recordTarget>' +
+      '<patientRole>' +
+      '<addr use="H">' +
+      '<state>24</state>' +
+      '</addr>' +
+      '</patientRole>' +
+      '</recordTarget>' +
       '</ClinicalDocument>';
 
     const schDoc = libxml.parseXml(sch);
