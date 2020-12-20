@@ -348,15 +348,15 @@ describe('document', () => {
       '</ClinicalDocument>';
 
     const xml_invalid =
-    '<ClinicalDocument>'+
-    '<recordTarget>'+
-    '<patientRole>'+
-    '<addr use="H">'+
-    '<state>24</state>'+
-    '</addr>'+
-    '</patientRole>'+
-    '</recordTarget>'+
-    '</ClinicalDocument>';
+      '<ClinicalDocument>'+
+      '<recordTarget>'+
+      '<patientRole>'+
+      '<addr use="H">'+
+      '<state>24</state>'+
+      '</addr>'+
+      '</patientRole>'+
+      '</recordTarget>'+
+      '</ClinicalDocument>';
 
     const schDoc = libxml.parseXml(sch);
     const xmlDocValid = libxml.parseXml(xml_valid);
