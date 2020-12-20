@@ -363,9 +363,15 @@ describe('document', () => {
     const xmlDocInvalid = libxml.parseXml(xml_invalid);
 
     expect(() => xmlDocValid.schematronValidate()).toThrow('Must pass schema');
-    expect(() => xmlDocValid.schematronValidate(undefined)).toThrow('Must pass schema');
-    expect(() => xmlDocValid.schematronValidate(null)).toThrow('Must pass schema');
-    expect(() => xmlDocValid.schematronValidate(0)).toThrow('Must pass XmlDocument');
+    expect(() => xmlDocValid.schematronValidate(undefined)).toThrow(
+      'Must pass schema'
+    );
+    expect(() => xmlDocValid.schematronValidate(null)).toThrow(
+      'Must pass schema'
+    );
+    expect(() => xmlDocValid.schematronValidate(0)).toThrow(
+      'Must pass XmlDocument'
+    );
     expect(xmlDocValid.schematronValidate(schDoc)).toBe(true);
     expect(xmlDocValid.validationErrors.length).toBe(0);
 
