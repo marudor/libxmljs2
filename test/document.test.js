@@ -324,6 +324,61 @@ describe('document', () => {
     expect(xmlDocInvalid.validationErrors.length).toBe(1);
   });
 
+  it('schematronValidate', () => {
+    const sch =
+      '<schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">' +
+      '<pattern id="errors">' +
+      '<rule context="//addr">' +
+      '<assert test="state[last()=1] or @nullFlavor">All //addr elements MUST have element state.</assert>' +
+      '<assert test="streetAddressLine or @nullFlavor">All //addr elements MUST have element streetAddressLine</assert>' +
+      '</rule>' +
+      '</pattern>' +
+      '</schema>';
+
+    const xml_valid =
+      '<ClinicalDocument>' +
+      '<recordTarget>' +
+      '<patientRole>' +
+      '<addr use="H">' +
+      '<state>24</state>' +
+      '<streetAddressLine>example street</streetAddressLine>' +
+      '</addr>' +
+      '</patientRole>' +
+      '</recordTarget>' +
+      '</ClinicalDocument>';
+
+    const xml_invalid =
+      '<ClinicalDocument>' +
+      '<recordTarget>' +
+      '<patientRole>' +
+      '<addr use="H">' +
+      '<state>24</state>' +
+      '</addr>' +
+      '</patientRole>' +
+      '</recordTarget>' +
+      '</ClinicalDocument>';
+
+    const schDoc = libxml.parseXml(sch);
+    const xmlDocValid = libxml.parseXml(xml_valid);
+    const xmlDocInvalid = libxml.parseXml(xml_invalid);
+
+    expect(() => xmlDocValid.schematronValidate()).toThrow('Must pass schema');
+    expect(() => xmlDocValid.schematronValidate(undefined)).toThrow(
+      'Must pass schema'
+    );
+    expect(() => xmlDocValid.schematronValidate(null)).toThrow(
+      'Must pass schema'
+    );
+    expect(() => xmlDocValid.schematronValidate(0)).toThrow(
+      'Must pass XmlDocument'
+    );
+    expect(xmlDocValid.schematronValidate(schDoc)).toBe(true);
+    expect(xmlDocValid.validationErrors.length).toBe(0);
+
+    expect(xmlDocInvalid.schematronValidate(schDoc)).toBe(false);
+    expect(xmlDocInvalid.validationErrors.length).toBe(1);
+  });
+
   it('validate memory usage', () => {
     const xsd =
       '<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"><xs:element name="comment" type="xs:string"/></xs:schema>';
