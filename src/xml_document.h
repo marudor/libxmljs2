@@ -52,6 +52,7 @@ protected:
   static NAN_METHOD(ToString);
   static NAN_METHOD(Validate);
   static NAN_METHOD(RngValidate);
+  static NAN_METHOD(SchematronValidate);
   static NAN_METHOD(type);
 
   // Static member variables

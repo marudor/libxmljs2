@@ -8,7 +8,7 @@
             "cflags": ["-Wall"],
             "xcode_settings": {"OTHER_CFLAGS": ["-Wall"]},
             "win_delay_load_hook": "true",
-            "defines": ["LIBXML_XINCLUDE_ENABLED", "BUILDING_NODE_EXTENSION"],
+            "defines": ["LIBXML_XINCLUDE_ENABLED", "LIBXML_SCHEMATRON_ENABLED", "BUILDING_NODE_EXTENSION"],
             "sources": [
                 "src/libxmljs.cc",
                 "src/xml_attribute.cc",
@@ -40,6 +40,7 @@
                 "vendor/libxml/parserInternals.c",
                 "vendor/libxml/pattern.c",
                 "vendor/libxml/relaxng.c",
+                "vendor/libxml/schematron.c",
                 "vendor/libxml/SAX2.c",
                 "vendor/libxml/SAX.c",
                 "vendor/libxml/tree.c",

@@ -88,6 +88,7 @@ export class Document {
   toString(formatted?: boolean): string;
   type(): 'document';
   validate(xsdDoc: Document): boolean;
+  schematronValidate(schemaDoc: Document): boolean;
   version(): string;
   setDtd(name: string, ext: string, sys: string): void;
   getDtd(): {
