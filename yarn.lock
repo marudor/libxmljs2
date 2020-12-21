@@ -1721,9 +1721,9 @@ escodegen@^1.14.1:
     source-map "~0.6.1"
 
 eslint-config-marudor@^7.3.1:
-  version "7.3.2"
-  resolved "https://registry.yarnpkg.com/eslint-config-marudor/-/eslint-config-marudor-7.3.2.tgz#79e9f8dd53f64c9d142322823b219f54b49e90f5"
-  integrity sha512-sIunNqf49F7L05kRSVLsMf91W8zikxA9sBAPrZSBkeiXMG1cJ7dUQ4jX9tNz8OKpEu1FGko6GshjkcMnxnnhGA==
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/eslint-config-marudor/-/eslint-config-marudor-7.3.3.tgz#6cbe5d775b00d4b252f96ffc542447d47a65e9e5"
+  integrity sha512-vfFWhe/bJd2dLDr6SCikgcd7CHOdTjQtcjZ0e3yJciejLVSKKvV2LQZ9AmjiIt9rlUZZbnugfpWHb126d1IpQg==
 
 eslint-config-prettier@^7.0.0:
   version "7.1.0"
