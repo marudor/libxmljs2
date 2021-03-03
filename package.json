@@ -35,9 +35,9 @@
     "node": ">=10"
   },
   "dependencies": {
+    "@mapbox/node-pre-gyp": "^1.0.0",
     "bindings": "~1.5.0",
-    "nan": "~2.14.0",
-    "node-pre-gyp": "^0.17.0"
+    "nan": "~2.14.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.10.0",
