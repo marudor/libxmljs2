@@ -35,7 +35,7 @@
     "node": ">=10"
   },
   "dependencies": {
-    "@mapbox/node-pre-gyp": "^1.0.0",
+    "@mapbox/node-pre-gyp": "^1.0.1",
     "bindings": "~1.5.0",
     "nan": "~2.14.0"
   },
