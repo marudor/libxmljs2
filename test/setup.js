@@ -7,6 +7,7 @@ if (!global.gc) {
 function collectGarbage(minCycles = 3, maxCycles = 10) {
   let cycles = 0;
   let freedRss = 0;
+  let lastFreedRss = 0;
   let usage = process.memoryUsage();
 
   do {
@@ -14,7 +15,8 @@ function collectGarbage(minCycles = 3, maxCycles = 10) {
 
     const usageAfterGc = process.memoryUsage();
 
-    freedRss = usage.rss - usageAfterGc.rss;
+    lastFreedRss = freedRss;
+    freedRss = lastFreedRss + usage.rss - usageAfterGc.rss;
     usage = usageAfterGc;
 
     cycles += 1;
