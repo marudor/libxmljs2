@@ -184,9 +184,17 @@ NAN_METHOD(XmlDocument::ToString) {
   assert(document);
 
   int options = 0;
+  const char *encoding = "UTF-8";
 
   if (info[0]->IsObject()) {
     Local<Object> obj = Nan::To<Object>(info[0]).ToLocalChecked();
+
+    // choose encoding declaration
+    v8::Local<v8::Value> encodingOpt = Nan::Get(obj, Nan::New<v8::String>("encoding").ToLocalChecked()).ToLocalChecked();
+    if (encodingOpt->IsString()) {
+      std::string encoding_ = *Nan::Utf8String(encodingOpt);
+      encoding = encoding_.c_str();
+    }
 
     // drop the xml declaration
     if (Nan::Get(obj, Nan::New<String>("declaration").ToLocalChecked())
@@ -245,7 +253,7 @@ NAN_METHOD(XmlDocument::ToString) {
   }
 
   xmlBuffer *buf = xmlBufferCreate();
-  xmlSaveCtxt *savectx = xmlSaveToBuffer(buf, "UTF-8", options);
+  xmlSaveCtxt *savectx = xmlSaveToBuffer(buf, encoding, options);
   xmlSaveTree(savectx, (xmlNode *)document->xml_obj);
   xmlSaveFlush(savectx);
   xmlSaveClose(savectx);
