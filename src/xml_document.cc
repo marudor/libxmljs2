@@ -184,6 +184,8 @@ NAN_METHOD(XmlDocument::ToString) {
   assert(document);
 
   int options = 0;
+  const char *encoding = "UTF-8";
+  Local<Value> encodingOpt = Nan::Null();
 
   if (info[0]->IsObject()) {
     Local<Object> obj = Nan::To<Object>(info[0]).ToLocalChecked();
@@ -216,6 +218,10 @@ NAN_METHOD(XmlDocument::ToString) {
       options |= XML_SAVE_WSNONSIG;
     }
 
+    encodingOpt =
+    Nan::Get(obj, Nan::New<String>("encoding").ToLocalChecked())
+        .ToLocalChecked();
+
     Local<Value> type = Nan::Get(obj, Nan::New<String>("type").ToLocalChecked())
                             .ToLocalChecked();
     if (Nan::Equals(type, Nan::New<String>("XML").ToLocalChecked())
@@ -244,8 +250,13 @@ NAN_METHOD(XmlDocument::ToString) {
     options |= XML_SAVE_FORMAT;
   }
 
+  if (encodingOpt->IsString()) {
+    Nan::Utf8String encoding_(Nan::To<String>(encodingOpt).ToLocalChecked());
+    encoding = *encoding_;
+  }
+
   xmlBuffer *buf = xmlBufferCreate();
-  xmlSaveCtxt *savectx = xmlSaveToBuffer(buf, "UTF-8", options);
+  xmlSaveCtxt *savectx = xmlSaveToBuffer(buf, encoding, options);
   xmlSaveTree(savectx, (xmlNode *)document->xml_obj);
   xmlSaveFlush(savectx);
   xmlSaveClose(savectx);
@@ -713,8 +724,8 @@ NAN_METHOD(XmlDocument::SchematronValidate) {
     return Nan::ThrowError(
         "Unable to create a validation context for the Schematron schema");
   }
-  xmlSchematronSetValidStructuredErrors(valid_ctxt, 
-                                        XmlSyntaxError::PushToArray, 
+  xmlSchematronSetValidStructuredErrors(valid_ctxt,
+                                        XmlSyntaxError::PushToArray,
                                         reinterpret_cast<void *>(&errors));
 
   bool valid = xmlSchematronValidateDoc(valid_ctxt, document->xml_obj) == 0;

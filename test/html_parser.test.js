@@ -164,4 +164,31 @@ describe('html parser', () => {
       doc.toString({ type: 'xml', selfCloseEmpty: true }).indexOf('<a/>') > -1
     ).toBeTruthy();
   });
+
+  it('toString with encoding', () => {
+    let doc = libxml.parseHtml('<a>Something&nbsp;with a space</a>');
+    expect(doc.toString({ type: 'xhtml' })).toEqual(
+      expect.not.stringContaining('&nbsp;')
+    );
+    expect(doc.toString({ type: 'xhtml', encoding: 'UTF-8' })).toEqual(
+      doc.toString({ type: 'xhtml' })
+    );
+    expect(doc.toString({ type: 'xhtml', encoding: 'HTML' })).toEqual(
+      expect.stringContaining('&nbsp;')
+    );
+    expect(doc.toString({ type: 'xhtml', encoding: 'ASCII' })).toEqual(
+      expect.stringContaining('&#160;')
+    );
+
+    doc = libxml.parseHtml('<a>Something with an emoji 😀</a>');
+    expect(doc.toString({ type: 'xhtml', encoding: 'UTF-8' })).toEqual(
+      expect.stringContaining('😀')
+    );
+    expect(doc.toString({ type: 'xhtml', encoding: 'HTML' })).toEqual(
+      expect.stringContaining('&#128512')
+    );
+    expect(doc.toString({ type: 'xhtml', encoding: 'ASCII' })).toEqual(
+      expect.stringContaining('&#128512')
+    );
+  });
 });
