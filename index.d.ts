@@ -133,6 +133,13 @@ export class Node {
           selfCloseEmpty: boolean;
           whitespace: boolean;
           type: 'xml' | 'html' | 'xhtml';
+          encoding?:
+            | 'HTML'
+            | 'ASCII'
+            | 'UTF-8'
+            | 'UTF-16'
+            | 'ISO-Latin-1'
+            | 'ISO-8859-1';
         }
   ): string;
 }
