@@ -34,6 +34,15 @@
   "engines": {
     "node": ">=12"
   },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "src",
+    "lib",
+    "vendor",
+    "binding.gyp",
+    "Makefile"
+  ],
   "dependencies": {
     "@mapbox/node-pre-gyp": "^1.0.5",
     "bindings": "~1.5.0",
