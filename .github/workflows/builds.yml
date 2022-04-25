@@ -13,8 +13,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2019, macos-10.15, ubuntu-18.04]
-        node: [12, 14, 16, 17]
+        os: [windows-2019, macos-10.15, ubuntu-20.04]
+        node: [14, 16, 18]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@master
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        node: [12, 14, 16, 17]
+        node: [14, 16, 18]
       fail-fast: true
     container:
       image: node:${{ matrix.node }}-alpine
@@ -58,14 +58,14 @@ jobs:
           name: alpine-${{ matrix.node }}-binary
           path: 'build/**/*.tar.gz'
   deploy:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     needs: [alpine, build]
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@master
         with:
-          node-version: 14
+          node-version: 16
       - uses: actions/download-artifact@v2
         with:
           path: build
