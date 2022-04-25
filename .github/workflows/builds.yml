@@ -50,6 +50,7 @@ jobs:
           npm_config_build_from_source: true
       - run: pnpm lint
       - run: pnpm tsd
+      - run: pnpm build
       - run: pnpm test
       - run: pnpm package
       - uses: actions/upload-artifact@v2
