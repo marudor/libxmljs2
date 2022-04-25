@@ -5,7 +5,7 @@
     "Jeff Smick",
     "Marco Rogers"
   ],
-  "packageManager": "yarn@1.22.18",
+  "packageManager": "pnpm@6.32.9",
   "binary": {
     "module_name": "xmljs",
     "module_path": "./build/Release/",
@@ -50,7 +50,6 @@
     "nan": "~2.15.0"
   },
   "devDependencies": {
-    "babel-eslint": "^10.1.0",
     "eslint": "^8.14.0",
     "eslint-config-marudor": "^9.0.0",
     "jest": "^27.5.1",
