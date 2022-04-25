@@ -14,7 +14,7 @@
     "package_name": "{node_abi}-{platform}-{arch}-{libc}.tar.gz"
   },
   "description": "libxml bindings for v8 javascript engine",
-  "version": "0.29.0",
+  "version": "0.30.0",
   "scripts": {
     "build": "node-pre-gyp install --build-from-source",
     "install": "node-pre-gyp install --fallback-to-build --loglevel http",
@@ -33,7 +33,7 @@
   "main": "./index",
   "license": "MIT",
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "files": [
     "index.js",
