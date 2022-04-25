@@ -20,13 +20,14 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: ${{ matrix.node }}
-      - run: yarn --frozen-lockfile
+      - run: npm i -g pnpm
+      - run: pnpm i --frozen-lockfile
         env:
           npm_config_build_from_source: true
-      - run: yarn lint
-      - run: yarn tsd
-      - run: yarn test
-      - run: yarn package
+      - run: pnpm lint
+      - run: pnpm tsd
+      - run: pnpm test
+      - run: pnpm package
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.os }}-${{ matrix.node }}-binary
@@ -43,13 +44,15 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           apk add --no-cache python3 make g++
-      - run: yarn --frozen-lockfile
+      - run: npm i -g pnpm
+      - run: pnpm i --frozen-lockfile
         env:
           npm_config_build_from_source: true
-      - run: yarn lint
-      - run: yarn tsd
-      - run: yarn test
-      - run: yarn package
+      - run: pnpm lint
+      - run: pnpm tsd
+      - run: pnpm build
+      - run: pnpm test
+      - run: pnpm package
       - uses: actions/upload-artifact@v2
         with:
           name: alpine-${{ matrix.node }}-binary
