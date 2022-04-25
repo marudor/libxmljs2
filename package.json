@@ -14,7 +14,7 @@
     "package_name": "{node_abi}-{platform}-{arch}-{libc}.tar.gz"
   },
   "description": "libxml bindings for v8 javascript engine",
-  "version": "0.30.0",
+  "version": "0.30.1",
   "scripts": {
     "build": "node-pre-gyp install --build-from-source",
     "install": "node-pre-gyp install --fallback-to-build --loglevel http",
