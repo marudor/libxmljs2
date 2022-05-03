@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: ${{ matrix.node }}
-      - run: npm i -g pnpm
+      - run: npm i -g pnpm@^6
       - run: pnpm i --frozen-lockfile
         env:
           npm_config_build_from_source: true
@@ -43,7 +43,7 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: ${{ matrix.node }}
-      - run: npm i -g pnpm
+      - run: npm i -g pnpm@^6
       - run: pnpm i --frozen-lockfile
         env:
           npm_config_build_from_source: true
@@ -67,7 +67,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           apk add --no-cache python3 make g++
-      - run: npm i -g pnpm
+      - run: npm i -g pnpm@^6
       - run: pnpm i --frozen-lockfile
         env:
           npm_config_build_from_source: true
