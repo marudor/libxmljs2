@@ -119,7 +119,7 @@ export class Node {
   nextSibling(): Node | null;
 
   line(): number;
-  type(): 'comment' | 'element' | 'text' | 'attribute' | 'pi';
+  type(): 'comment' | 'element' | 'text' | 'attribute' | 'pi' | 'cdata';
   remove(): this;
   clone(): this;
   /**
