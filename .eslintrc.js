@@ -9,5 +9,6 @@ module.exports = {
   rules: {
     'guard-for-in': 0,
     'jest/no-conditional-expect': 0,
+    'unicorn/prefer-module': 0,
   },
 };

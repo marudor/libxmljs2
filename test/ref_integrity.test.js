@@ -4,34 +4,34 @@ if (!global.gc) {
   throw new Error('must run with --expose_gc for ref integrity tests');
 }
 
+function makeDocument() {
+  const body =
+    "<?xml version='1.0' encoding='UTF-8'?>\n" +
+    '<root><outer><middle><inner><left/><center/><right/></inner></middle></outer></root>';
+
+  return libxml.parseXml(body);
+}
+
+function collectGarbage(minCycles = 3, maxCycles = 10) {
+  let cycles = 0;
+  let freedRss = 0;
+  let usage = process.memoryUsage();
+
+  do {
+    global.gc();
+
+    const usageAfterGc = process.memoryUsage();
+
+    freedRss = usage.rss - usageAfterGc.rss;
+    usage = usageAfterGc;
+
+    cycles += 1;
+  } while (cycles < minCycles || (freedRss !== 0 && cycles < maxCycles));
+
+  return usage;
+}
+
 describe('ref integrity', () => {
-  function makeDocument() {
-    const body =
-      "<?xml version='1.0' encoding='UTF-8'?>\n" +
-      '<root><outer><middle><inner><left/><center/><right/></inner></middle></outer></root>';
-
-    return libxml.parseXml(body);
-  }
-
-  function collectGarbage(minCycles = 3, maxCycles = 10) {
-    let cycles = 0;
-    let freedRss = 0;
-    let usage = process.memoryUsage();
-
-    do {
-      global.gc();
-
-      const usageAfterGc = process.memoryUsage();
-
-      freedRss = usage.rss - usageAfterGc.rss;
-      usage = usageAfterGc;
-
-      cycles += 1;
-    } while (cycles < minCycles || (freedRss !== 0 && cycles < maxCycles));
-
-    return usage;
-  }
-
   it('gc', () => {
     const doc = new libxml.Document();
 
@@ -65,12 +65,12 @@ describe('ref integrity', () => {
       const html = '<html><body><div><span></span></div></body></html>';
       const doc = libxml.parseHtml(html);
 
-      doc.find('//div').forEach((tag) => {
+      for (const tag of doc.find('//div')) {
         // provide a reference to childNodes so they are exposed as XmlNodes
         // and therefore subject to V8's garbage collection
         children = tag.childNodes();
         tag.remove();
-      });
+      }
     })();
 
     global.gc();

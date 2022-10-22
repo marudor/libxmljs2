@@ -1,5 +1,5 @@
 const libxml = require('../index');
-const path = require('path');
+const path = require('node:path');
 
 describe('xinclude', () => {
   const xml =

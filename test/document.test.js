@@ -1,26 +1,26 @@
 const libxml = require('../index');
 
+function rssAfterGarbageCollection(maxCycles = 10) {
+  let rss = libxml.memoryUsage();
+  let freedMemory = 0;
+
+  do {
+    global.gc();
+
+    const rssAfterGc = libxml.memoryUsage();
+
+    freedMemory = rss - rssAfterGc;
+    rss = rssAfterGc;
+
+    // eslint-disable-next-line no-param-reassign
+    maxCycles -= 1;
+  } while (freedMemory !== 0 && maxCycles > 0);
+
+  return rss;
+}
+
 describe('document', () => {
   const VALIDATE_RSS_TOLERANCE = 1;
-
-  function rssAfterGarbageCollection(maxCycles = 10) {
-    let rss = libxml.memoryUsage();
-    let freedMemory = 0;
-
-    do {
-      global.gc();
-
-      const rssAfterGc = libxml.memoryUsage();
-
-      freedMemory = rss - rssAfterGc;
-      rss = rssAfterGc;
-
-      // eslint-disable-next-line no-param-reassign
-      maxCycles -= 1;
-    } while (freedMemory !== 0 && maxCycles > 0);
-
-    return rss;
-  }
 
   it('getDtd', () => {
     let doc = libxml.parseXmlString(
@@ -102,10 +102,10 @@ describe('document', () => {
   });
 
   it('full', () => {
-    const doc = new libxml.Document('2.0', 'UTF-8');
+    const doc = new libxml.Document('2.0', 'utf8');
 
     expect('2.0').toBe(doc.version());
-    expect('UTF-8').toBe(doc.encoding());
+    expect('utf8').toBe(doc.encoding());
   });
 
   it('null root', () => {
