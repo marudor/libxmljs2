@@ -1,5 +1,13 @@
-const fs = require('fs');
+const fs = require('node:fs');
 const libxml = require('../index');
+
+function test_parser_option(input, options, expected) {
+  let output = libxml.parseXml(input, options).toString();
+
+  output = output.replace(/^<\?xml version="1.0" encoding="UTF-8"\?>\n/, '');
+  output = output.replace(/\n$/, '');
+  expect(expected).toBe(output);
+}
 
 describe('xml parser', () => {
   it('parse', () => {
@@ -10,6 +18,7 @@ describe('xml parser', () => {
     const doc = libxml.parseXml(str);
 
     expect(doc.version()).toBe('1.0');
+    // eslint-disable-next-line unicorn/text-encoding-identifier-case
     expect(doc.encoding()).toBe('UTF-8');
     expect(doc.root().name()).toBe('root');
     expect(doc.get('child').name()).toBe('child');
@@ -56,7 +65,7 @@ describe('xml parser', () => {
   });
 
   it('baseurl_xml', () => {
-    if (/^win/.test(process.platform)) {
+    if (process.platform.startsWith('win')) {
       // libxml won't resolve the path on Windows
 
       return;
@@ -121,18 +130,8 @@ describe('xml parser', () => {
     expect(text.path()).toEqual('/Name/text()');
   });
 
+  // eslint-disable-next-line jest/expect-expect
   it('parse_options', () => {
-    function test_parser_option(input, options, expected) {
-      let output = libxml.parseXml(input, options).toString();
-
-      output = output.replace(
-        /^<\?xml version="1.0" encoding="UTF-8"\?>\n/,
-        ''
-      );
-      output = output.replace(/\n$/, '');
-      expect(expected).toBe(output);
-    }
-
     test_parser_option('<x>&</x>', { recover: true }, '<x/>'); // without this option, this document would raise an exception during parsing
     test_parser_option(
       "<!DOCTYPE x [ <!ENTITY foo 'bar'> ]> <x>&foo;</x>",

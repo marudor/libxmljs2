@@ -63,16 +63,15 @@ describe('searching', () => {
     const doc = new libxml.Document();
     const root = doc.node('root');
 
-    children.push(root.node('child'));
-    children.push(root.node('child'));
+    children.push(root.node('child'), root.node('child'));
 
     const results = doc.find('child');
 
     expect(children.length).toBe(2);
     expect(results.length).toBe(2);
 
-    for (let child = 0; child < children.length; child += 1) {
-      expect(results[child]).toBe(children[child]);
+    for (const [child, child_] of children.entries()) {
+      expect(results[child]).toBe(child_);
     }
   });
 
@@ -100,8 +99,7 @@ describe('searching', () => {
       const doc = new libxml.Document();
       const root = doc.node('root');
 
-      children.push(root.node('child'));
-      children.push(root.node('child'));
+      children.push(root.node('child'), root.node('child'));
 
       const ns = children[0].namespace(uri).namespace();
 
@@ -111,8 +109,8 @@ describe('searching', () => {
 
       expect(children.length).toBe(2);
       expect(results.length).toBe(2);
-      for (let child = 0; child < children.length; child += 1) {
-        expect(results[child]).toBe(children[child]);
+      for (const [child, child_] of children.entries()) {
+        expect(results[child]).toBe(child_);
       }
     });
   });
@@ -143,8 +141,7 @@ describe('searching', () => {
       const doc = new libxml.Document();
       const root = doc.node('root');
 
-      children.push(root.node('child'));
-      children.push(root.node('child'));
+      children.push(root.node('child'), root.node('child'));
 
       const ns = children[0].namespace(prefix, uri).namespace();
 
@@ -158,8 +155,8 @@ describe('searching', () => {
 
       expect(children.length).toBe(2);
       expect(results.length).toBe(2);
-      for (let child = 0; child < children.length; child += 1) {
-        expect(results[child]).toBe(children[child]);
+      for (const [child, child_] of children.entries()) {
+        expect(results[child]).toBe(child_);
       }
     });
   });
