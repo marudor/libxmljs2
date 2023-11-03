@@ -1,9 +1,10 @@
 {
-  "name": "libxmljs2",
-  "author": "marudor",
+  "name": "@loanlink/libxmljs2",
+  "author": "LoanLink",
   "contributors": [
     "Jeff Smick",
-    "Marco Rogers"
+    "Marco Rogers",
+    "Max Stevens"
   ],
   "packageManager": "pnpm@8.3.1",
   "binary": {
@@ -25,10 +26,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/marudor/libxmljs2.git"
+    "url": "http://github.com/Capital-Management-Group/libxmljs2.git"
   },
   "bugs": {
-    "url": "http://github.com/marudor/libxmljs2/issues"
+    "url": "http://github.com/Capital-Management-Group/libxmljs2/issues"
   },
   "main": "./index",
   "license": "MIT",
