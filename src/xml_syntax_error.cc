@@ -2,6 +2,9 @@
 
 #include <cstring>
 
+#include <libxml/tree.h>
+#include <libxml/xpath.h>
+
 #include "xml_syntax_error.h"
 
 using namespace v8;
@@ -20,6 +23,18 @@ void set_numeric_field(Local<Object> obj, const char *name, const int value) {
   Nan::HandleScope scope;
   Nan::Set(obj, Nan::New<String>(name).ToLocalChecked(),
            Nan::New<Int32>(value));
+}
+
+char *xmlCharToChar(xmlChar *xmlStr) {
+  char *charStr = (char *)malloc(xmlStrlen(xmlStr) + 1);
+  if (charStr == NULL) {
+    return NULL;
+  }
+
+  strncpy(charStr, (char *)xmlStr, xmlStrlen(xmlStr));
+  charStr[xmlStrlen(xmlStr)] = '\0';
+
+  return charStr;
 }
 
 } // anonymous namespace
@@ -43,6 +58,15 @@ Local<Value> XmlSyntaxError::BuildSyntaxError(xmlError *error) {
   set_string_field(out, "str1", error->str1);
   set_string_field(out, "str2", error->str2);
   set_string_field(out, "str3", error->str3);
+
+  if (error->node) {
+    xmlNode *node = static_cast<xmlNode *>(error->node);
+    char *xpath = xmlCharToChar(xmlGetNodePath(node));
+
+    set_string_field(out, "xpath", xpath);
+
+    free(xpath);
+  }
 
   // only add if we have something interesting
   if (error->int1) {

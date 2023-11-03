@@ -270,4 +270,6 @@ export interface ValidationError extends Error {
    * 1-based column number, 0 if not applicable/available.
    */
   column: number;
+
+  xpath: string;
 }
