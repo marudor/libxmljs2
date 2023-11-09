@@ -44,19 +44,25 @@ interface ParserOptions {
   baseUrl?: string;
 }
 
-export function parseXml(source: string, options?: ParserOptions): Document;
+export function parseXml(
+  source: string | Buffer,
+  options?: ParserOptions
+): Document;
 export function parseXmlString(
   source: string,
   options?: ParserOptions
 ): Document;
 
-export function parseHtml(source: string, options?: ParserOptions): Document;
+export function parseHtml(
+  source: string | Buffer,
+  options?: ParserOptions
+): Document;
 export function parseHtmlString(
   source: string,
   options?: ParserOptions
 ): Document;
 export function parseHtmlFragment(
-  source: string,
+  source: string | Buffer,
   options?: ParserOptions
 ): Document;
 
