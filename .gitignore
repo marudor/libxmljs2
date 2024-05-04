@@ -6,3 +6,4 @@ npm-debug.log
 .token
 .vscode
 .idea
+prebuilds/
