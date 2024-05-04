@@ -68,7 +68,7 @@ jobs:
           node-version: 20
       - uses: actions/download-artifact@v2
         with:
-          path: build
+          path: prebuilds
       - id: vars
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
       - uses: eine/tip@master
