@@ -567,6 +567,9 @@ Local<Value> XmlNode::get_all_namespaces() {
 Local<Value> XmlNode::get_local_namespaces() {
   Nan::EscapableHandleScope scope;
 
+  if (xml_obj->type == XML_ENTITY_DECL)
+    return scope.Escape(Nan::New<Array>());
+
   // Iterate through local namespaces
   Local<Array> namespaces = Nan::New<Array>();
   xmlNs *nsDef = xml_obj->nsDef;

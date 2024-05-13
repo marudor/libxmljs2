@@ -347,6 +347,9 @@ void XmlElement::set_attr(const char *name, const char *value) {
 
 Local<Value> XmlElement::get_attrs() {
   Nan::EscapableHandleScope scope;
+  if (xml_obj->type == XML_ENTITY_DECL)
+    return scope.Escape(Nan::New<Array>(0));
+
   xmlAttr *attr = xml_obj->properties;
 
   if (!attr)
