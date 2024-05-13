@@ -147,4 +147,39 @@ describe('xml parser', () => {
     test_parser_option('<x><![CDATA[hi]]></x>', {}, '<x><![CDATA[hi]]></x>'); // normally CDATA stays as CDATA
     test_parser_option('<x><![CDATA[hi]]></x>', { nocdata: true }, '<x>hi</x>'); // but here CDATA is removed!
   });
+
 });
+
+it('Type confusion in XmlElement::get_attrs', () => {
+  var d = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE note
+[
+<!ENTITY writer "` + 'A'.repeat(0x1234) + `" >
+]>
+    <from>&writer;</from>
+  `;
+
+  t = libxml.parseXml(d, { huge: true })
+  from = t.get('//from')
+  c = from.childNodes()[0]
+  c2 = c.childNodes()[0]
+  c2_attrs = c2.attrs()
+  expect(c2_attrs.length).toBe(0)
+})
+
+it('Type confusion in XmlNode::get_local_namespaces', () => {
+  var d = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE note
+[
+<!ENTITY writer PUBLIC "` + "A".repeat(8) + "B".repeat(8) + "C".repeat(8) + "D".repeat(8) + "P".repeat(8) + `" "JFrog Security">
+]>
+<from>&writer;</from>
+`;
+
+  t = libxml.parseXml(d)
+  from = t.get('//from')
+  c = from.childNodes()[0]
+  c2 = c.childNodes()[0] //entity_decl
+  n = c2.namespaces(true) //onlyLocal = true
+  expect(n.length).toBe(0)
+})
