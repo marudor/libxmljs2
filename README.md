@@ -1,3 +1,5 @@
+# NO LONGER MAINTAINED
+
 # Libxmljs2
 
 LibXML bindings for [node.js](http://nodejs.org/)
