@@ -11,9 +11,11 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
-
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
+
+#ifdef _WIN32
+  #include <fcntl.h>
+  #include <io.h>
 #endif
 
 #ifdef HAVE_LIBREADLINE
@@ -27,7 +29,6 @@
 #include <libxml/uri.h>
 #include <libxml/catalog.h>
 #include <libxml/parser.h>
-#include <libxml/globals.h>
 
 #if defined(LIBXML_CATALOG_ENABLED) && defined(LIBXML_OUTPUT_ENABLED)
 static int shell = 0;
@@ -43,7 +44,7 @@ static char *filename = NULL;
 
 
 #ifndef XML_SGML_DEFAULT_CATALOG
-#define XML_SGML_DEFAULT_CATALOG "/etc/sgml/catalog"
+#define XML_SGML_DEFAULT_CATALOG SYSCONFDIR "/sgml/catalog"
 #endif
 
 /************************************************************************
@@ -68,9 +69,11 @@ xmlShellReadline(const char *prompt) {
     /* Get a line from the user. */
     line_read = readline (prompt);
 
+#ifdef HAVE_LIBHISTORY
     /* If the line has any text in it, save it on the history. */
     if (line_read && *line_read)
 	add_history (line_read);
+#endif
 
     return (line_read);
 #else
@@ -214,32 +217,17 @@ static void usershell(void) {
 		}
 	    }
 	} else if (!strcmp(command, "add")) {
-	    if (sgml) {
-		if ((nbargs != 3) && (nbargs != 2)) {
-		    printf("add requires 2 or 3 arguments\n");
-		} else {
-		    if (argv[2] == NULL)
-			ret = xmlCatalogAdd(BAD_CAST argv[0], NULL,
-					    BAD_CAST argv[1]);
-		    else
-			ret = xmlCatalogAdd(BAD_CAST argv[0], BAD_CAST argv[1],
-					    BAD_CAST argv[2]);
-		    if (ret != 0)
-			printf("add command failed\n");
-		}
+	    if ((nbargs != 3) && (nbargs != 2)) {
+		printf("add requires 2 or 3 arguments\n");
 	    } else {
-		if ((nbargs != 3) && (nbargs != 2)) {
-		    printf("add requires 2 or 3 arguments\n");
-		} else {
-		    if (argv[2] == NULL)
-			ret = xmlCatalogAdd(BAD_CAST argv[0], NULL,
-					    BAD_CAST argv[1]);
-		    else
-			ret = xmlCatalogAdd(BAD_CAST argv[0], BAD_CAST argv[1],
-					    BAD_CAST argv[2]);
-		    if (ret != 0)
-			printf("add command failed\n");
-		}
+		if (argv[2] == NULL)
+		ret = xmlCatalogAdd(BAD_CAST argv[0], NULL,
+				    BAD_CAST argv[1]);
+		else
+		    ret = xmlCatalogAdd(BAD_CAST argv[0], BAD_CAST argv[1],
+					BAD_CAST argv[2]);
+		if (ret != 0)
+		    printf("add command failed\n");
 	    }
 	} else if (!strcmp(command, "del")) {
 	    if (nbargs != 1) {
@@ -332,6 +320,11 @@ int main(int argc, char **argv) {
     int ret;
     int exit_value = 0;
 
+#ifdef _WIN32
+    _setmode(_fileno(stdin), _O_BINARY);
+    _setmode(_fileno(stdout), _O_BINARY);
+    _setmode(_fileno(stderr), _O_BINARY);
+#endif
 
     if (argc <= 1) {
 	usage(argv[0]);
@@ -494,7 +487,7 @@ int main(int argc, char **argv) {
 		    if (xmlCatalogIsEmpty(catal)) {
 			remove(argv[i + 1]);
 		    } else {
-			out = fopen(argv[i + 1], "w");
+			out = fopen(argv[i + 1], "wb");
 			if (out == NULL) {
 			    fprintf(stderr, "could not open %s for saving\n",
 				    argv[i + 1]);
@@ -509,7 +502,7 @@ int main(int argc, char **argv) {
 			if (xmlCatalogIsEmpty(super)) {
 			    remove(XML_SGML_DEFAULT_CATALOG);
 			} else {
-			    out = fopen(XML_SGML_DEFAULT_CATALOG, "w");
+			    out = fopen(XML_SGML_DEFAULT_CATALOG, "wb");
 			    if (out == NULL) {
 				fprintf(stderr,
 					"could not open %s for saving\n",
@@ -527,6 +520,9 @@ int main(int argc, char **argv) {
 		    xmlACatalogDump(catal, stdout);
 		}
 		i += 2;
+
+                xmlFreeCatalog(catal);
+                xmlFreeCatalog(super);
 	    } else {
 		if ((!strcmp(argv[i], "-add")) ||
 		    (!strcmp(argv[i], "--add"))) {
@@ -596,7 +592,7 @@ int main(int argc, char **argv) {
 	if (noout && filename && *filename) {
 	    FILE *out;
 
-	    out = fopen(filename, "w");
+	    out = fopen(filename, "wb");
 	    if (out == NULL) {
 		fprintf(stderr, "could not open %s for saving\n", filename);
 		exit_value = 2;
@@ -613,7 +609,6 @@ int main(int argc, char **argv) {
      * Cleanup and check for memory leaks
      */
     xmlCleanupParser();
-    xmlMemoryDump();
     return(exit_value);
 }
 #else
