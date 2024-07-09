@@ -484,7 +484,7 @@ NAN_METHOD(XmlDocument::FromHtml) {
   xmlSetStructuredErrorFunc(NULL, NULL);
 
   if (!doc) {
-    xmlError *error = xmlGetLastError();
+    const xmlError *error = xmlGetLastError();
     if (error) {
       return Nan::ThrowError(XmlSyntaxError::BuildSyntaxError(error));
     }
@@ -548,7 +548,7 @@ NAN_METHOD(XmlDocument::FromXml) {
   xmlSetStructuredErrorFunc(NULL, NULL);
 
   if (!doc) {
-    xmlError *error = xmlGetLastError();
+    const xmlError *error = xmlGetLastError();
     if (error) {
       return Nan::ThrowError(XmlSyntaxError::BuildSyntaxError(error));
     }
@@ -562,7 +562,7 @@ NAN_METHOD(XmlDocument::FromXml) {
     xmlSetStructuredErrorFunc(NULL, NULL);
 
     if (ret < 0) {
-      xmlError *error = xmlGetLastError();
+      const xmlError *error = xmlGetLastError();
       if (error) {
         return Nan::ThrowError(XmlSyntaxError::BuildSyntaxError(error));
       }
