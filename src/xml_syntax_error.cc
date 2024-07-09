@@ -26,7 +26,7 @@ void set_numeric_field(Local<Object> obj, const char *name, const int value) {
 
 namespace libxmljs {
 
-Local<Value> XmlSyntaxError::BuildSyntaxError(xmlError *error) {
+Local<Value> XmlSyntaxError::BuildSyntaxError(const xmlError *error) {
   Nan::EscapableHandleScope scope;
 
   Local<Value> err =
@@ -51,7 +51,7 @@ Local<Value> XmlSyntaxError::BuildSyntaxError(xmlError *error) {
   return scope.Escape(err);
 }
 
-void XmlSyntaxError::PushToArray(void *errs, xmlError *error) {
+void XmlSyntaxError::PushToArray(void *errs, const xmlError *error) {
   Nan::HandleScope scope;
   Local<Array> errors = *reinterpret_cast<Local<Array> *>(errs);
   // push method for array
