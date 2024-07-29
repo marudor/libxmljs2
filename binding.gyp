@@ -42,7 +42,6 @@
                 "vendor/libxml/relaxng.c",
                 "vendor/libxml/schematron.c",
                 "vendor/libxml/SAX2.c",
-                "vendor/libxml/SAX.c",
                 "vendor/libxml/tree.c",
                 "vendor/libxml/threads.c",
                 "vendor/libxml/uri.c",
