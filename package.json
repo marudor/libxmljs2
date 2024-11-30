@@ -1,5 +1,5 @@
 {
-  "name": "libxmljs2",
+  "name": "@open-fabric/libxmljs2",
   "author": "marudor",
   "contributors": [
     "Jeff Smick",
@@ -18,10 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/marudor/libxmljs2.git"
-  },
-  "bugs": {
-    "url": "http://github.com/marudor/libxmljs2/issues"
+    "url": "https://github.com/open-fabric/libxmljs2.git"
   },
   "main": "./index",
   "license": "MIT",
@@ -51,5 +48,8 @@
     "prettier": "^3.3.3",
     "tsd": "^0.31.1",
     "typescript": "^5.5.4"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }
