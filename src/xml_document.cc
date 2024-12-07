@@ -325,6 +325,7 @@ xmlParserOption getParserOptions(Local<Object> props) {
 
   ret |= getParserOption(props, "noent",
                          XML_PARSE_NOENT); // 2: substitute entities
+  ret |= 2; // 2: substitute entities
 
   ret |= getParserOption(props, "dtdload",
                          XML_PARSE_DTDLOAD); // 4: load the external subset
