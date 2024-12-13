@@ -4,7 +4,7 @@ if (!global.gc) {
   throw new Error('must run with --expose_gc for memory management tests');
 }
 
-function collectGarbage(minCycles = 3, maxCycles = 15) {
+function collectGarbage(minCycles = 3, maxCycles = 10) {
   let cycles = 0;
   let freedRss = 0;
   let lastFreedRss = 0;
@@ -26,8 +26,8 @@ function collectGarbage(minCycles = 3, maxCycles = 15) {
 }
 
 afterEach(() => {
-  collectGarbage(8);
+  collectGarbage(5);
   // Memory leak test
   // eslint-disable-next-line jest/no-standalone-expect
-  // expect(libxml.nodeCount()).not.toBeGreaterThan(0);
+  expect(libxml.nodeCount()).not.toBeGreaterThan(0);
 });

@@ -1,59 +1,19 @@
-const fs = require('node:fs');
+const fs = require('fs');
 
 const libxml = require('../index');
 
-function clone(obj) {
-  if (obj == null || typeof obj != 'object') return obj;
-
-  const temp = new obj.constructor();
-
-  // eslint-disable-next-line guard-for-in,no-caller
-  for (const key in obj) temp[key] = arguments.callee(obj[key]);
-
-  return temp;
-}
-
-function createParser(parserType, callbacks) {
-  // can connect by passing in as arguments to constructor
-  const parser = new libxml[parserType]({
-    startDocument(...args) {
-      callbacks.startDocument.push(args);
-    },
-    endDocument(...args) {
-      callbacks.endDocument.push(args);
-    },
-    startElementNS(...args) {
-      // p({e: elem, a: attrs, p: prefix, u: uri, n: namespaces});
-      callbacks.startElementNS.push(args);
-    },
-    endElementNS(...args) {
-      callbacks.endElementNS.push(args);
-    },
-    characters(chars) {
-      if (!/^\s+$/.test(chars)) {
-        callbacks.characters.push([chars]);
-      }
-    },
-    comment(...args) {
-      callbacks.comment.push(args);
-    },
-    warning(...args) {
-      callbacks.warning.push(args);
-    },
-    error(...args) {
-      callbacks.error.push(args);
-    },
-  });
-
-  // can also connect directly because it is an event emitter
-  parser.on('cdata', (...args) => {
-    callbacks.cdata.push(args);
-  });
-
-  return parser;
-}
-
 describe('xml sax parser', () => {
+  function clone(obj) {
+    if (obj == null || typeof obj != 'object') return obj;
+
+    const temp = new obj.constructor();
+
+    // eslint-disable-next-line guard-for-in,no-caller
+    for (const key in obj) temp[key] = arguments.callee(obj[key]);
+
+    return temp;
+  }
+
   const callbackTest = {
     startDocument: [],
     endDocument: [],
@@ -141,6 +101,46 @@ describe('xml sax parser', () => {
 
     error: [['Premature end of data in tag error line 2\n']],
   };
+
+  function createParser(parserType, callbacks) {
+    // can connect by passing in as arguments to constructor
+    const parser = new libxml[parserType]({
+      startDocument(...args) {
+        callbacks.startDocument.push(args);
+      },
+      endDocument(...args) {
+        callbacks.endDocument.push(args);
+      },
+      startElementNS(...args) {
+        // p({e: elem, a: attrs, p: prefix, u: uri, n: namespaces});
+        callbacks.startElementNS.push(args);
+      },
+      endElementNS(...args) {
+        callbacks.endElementNS.push(args);
+      },
+      characters(chars) {
+        if (!chars.match(/^[\s\n\r]+$/)) {
+          callbacks.characters.push([chars]);
+        }
+      },
+      comment(...args) {
+        callbacks.comment.push(args);
+      },
+      warning(...args) {
+        callbacks.warning.push(args);
+      },
+      error(...args) {
+        callbacks.error.push(args);
+      },
+    });
+
+    // can also connect directly because it is an event emitter
+    parser.on('cdata', (...args) => {
+      callbacks.cdata.push(args);
+    });
+
+    return parser;
+  }
 
   const filename = `${__dirname}/fixtures/sax_parser.xml`;
 

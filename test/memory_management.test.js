@@ -4,37 +4,37 @@ if (!global.gc) {
   throw new Error('must run with --expose_gc for memory management tests');
 }
 
-function makeDocument() {
-  const body =
-    "<?xml version='1.0' encoding='UTF-8'?>\n" +
-    '<root><outer><middle><inner><center/></inner></middle></outer></root>';
-
-  return libxml.parseXml(body);
-}
-
-function collectGarbage(minCycles = 3, maxCycles = 10) {
-  let cycles = 0;
-  let freedRss = 0;
-  let usage = process.memoryUsage();
-
-  do {
-    global.gc();
-
-    const usageAfterGc = process.memoryUsage();
-
-    freedRss = usage.rss - usageAfterGc.rss;
-    usage = usageAfterGc;
-
-    cycles += 1;
-  } while (cycles < minCycles || (freedRss !== 0 && cycles < maxCycles));
-
-  return usage;
-}
-
 describe('memory management', () => {
+  function collectGarbage(minCycles = 3, maxCycles = 10) {
+    let cycles = 0;
+    let freedRss = 0;
+    let usage = process.memoryUsage();
+
+    do {
+      global.gc();
+
+      const usageAfterGc = process.memoryUsage();
+
+      freedRss = usage.rss - usageAfterGc.rss;
+      usage = usageAfterGc;
+
+      cycles += 1;
+    } while (cycles < minCycles || (freedRss !== 0 && cycles < maxCycles));
+
+    return usage;
+  }
+
   beforeEach(() => {
     collectGarbage();
   });
+
+  function makeDocument() {
+    const body =
+      "<?xml version='1.0' encoding='UTF-8'?>\n" +
+      '<root><outer><middle><inner><center/></inner></middle></outer></root>';
+
+    return libxml.parseXml(body);
+  }
 
   it('inaccessible document freed', () => {
     return new Promise((done) => {

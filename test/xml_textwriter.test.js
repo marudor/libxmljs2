@@ -27,13 +27,13 @@ describe('xml textwriter', () => {
     expect(output).toBe('<?xml version="1.0"?>\n\n');
 
     writer = new libxml.TextWriter();
-    count += writer.startDocument('1.0', 'utf8');
+    count += writer.startDocument('1.0', 'UTF-8');
     count += writer.endDocument();
     output = writer.outputMemory();
     expect(output).toBe('<?xml version="1.0" encoding="UTF-8"?>\n\n');
 
     writer = new libxml.TextWriter();
-    count += writer.startDocument('1.0', 'utf8', 'yes');
+    count += writer.startDocument('1.0', 'UTF-8', 'yes');
     count += writer.endDocument();
     output = writer.outputMemory();
     expect(output).toBe(
@@ -45,7 +45,7 @@ describe('xml textwriter', () => {
     it('true === yes', () => {
       const writer = new libxml.TextWriter();
 
-      writer.startDocument('1.0', 'utf8', true);
+      writer.startDocument('1.0', 'UTF-8', true);
       writer.endDocument();
       expect(writer.outputMemory()).toBe(
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n\n'
@@ -55,7 +55,7 @@ describe('xml textwriter', () => {
     it('false === no', () => {
       const writer = new libxml.TextWriter();
 
-      writer.startDocument('1.0', 'utf8', false);
+      writer.startDocument('1.0', 'UTF-8', false);
       writer.endDocument();
       expect(writer.outputMemory()).toBe(
         '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n\n'
@@ -65,7 +65,7 @@ describe('xml textwriter', () => {
     it('default === no', () => {
       const writer = new libxml.TextWriter();
 
-      writer.startDocument('1.0', 'utf8', false);
+      writer.startDocument('1.0', 'UTF-8', false);
       writer.endDocument();
       expect(writer.outputMemory()).toBe(
         '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n\n'
@@ -75,7 +75,7 @@ describe('xml textwriter', () => {
     it('falsy === NULL', () => {
       const writer = new libxml.TextWriter();
 
-      writer.startDocument('1.0', 'utf8', 0);
+      writer.startDocument('1.0', 'UTF-8', 0);
       writer.endDocument();
       expect(writer.outputMemory()).toBe(
         '<?xml version="1.0" encoding="UTF-8"?>\n\n'
@@ -85,7 +85,7 @@ describe('xml textwriter', () => {
     it('missing === NULL', () => {
       const writer = new libxml.TextWriter();
 
-      writer.startDocument('1.0', 'utf8');
+      writer.startDocument('1.0', 'UTF-8');
       writer.endDocument();
       expect(writer.outputMemory()).toBe(
         '<?xml version="1.0" encoding="UTF-8"?>\n\n'
@@ -95,7 +95,7 @@ describe('xml textwriter', () => {
     it('undefined === NULL', () => {
       const writer = new libxml.TextWriter();
 
-      writer.startDocument('1.0', 'utf8', undefined);
+      writer.startDocument('1.0', 'UTF-8', undefined);
       writer.endDocument();
       expect(writer.outputMemory()).toBe(
         '<?xml version="1.0" encoding="UTF-8"?>\n\n'
@@ -108,7 +108,7 @@ describe('xml textwriter', () => {
     // eslint-disable-next-line no-unused-vars
     let count;
 
-    count += writer.startDocument('1.0', 'utf8');
+    count += writer.startDocument('1.0', 'UTF-8');
     count += writer.startElementNS(undefined, 'root');
     count += writer.startElementNS(undefined, 'child');
     count += writer.endElement();
@@ -126,7 +126,7 @@ describe('xml textwriter', () => {
     // eslint-disable-next-line no-unused-vars
     let count;
 
-    count += writer.startDocument('1.0', 'utf8');
+    count += writer.startDocument('1.0', 'UTF-8');
     count += writer.startElementNS(
       undefined,
       'html',
@@ -148,7 +148,7 @@ describe('xml textwriter', () => {
     // eslint-disable-next-line no-unused-vars
     let count;
 
-    count += writer.startDocument('1.0', 'utf8');
+    count += writer.startDocument('1.0', 'UTF-8');
     count += writer.startElementNS(
       'html',
       'html',
@@ -170,7 +170,7 @@ describe('xml textwriter', () => {
     // eslint-disable-next-line no-unused-vars
     let count;
 
-    count += writer.startDocument('1.0', 'utf8');
+    count += writer.startDocument('1.0', 'UTF-8');
     count += writer.startElementNS(undefined, 'root', 'http://example.com');
     count += writer.startAttributeNS(undefined, 'attr', 'http://example.com');
     count += writer.writeString('value');
@@ -189,7 +189,7 @@ describe('xml textwriter', () => {
     // eslint-disable-next-line no-unused-vars
     let count;
 
-    count += writer.startDocument('1.0', 'utf8');
+    count += writer.startDocument('1.0', 'UTF-8');
     count += writer.startElementNS(undefined, 'root');
     count += writer.startAttributeNS('pfx', 'attr', 'http://example.com');
     count += writer.writeString('value');
@@ -208,7 +208,7 @@ describe('xml textwriter', () => {
     // eslint-disable-next-line no-unused-vars
     let count;
 
-    count += writer.startDocument('1.0', 'utf8');
+    count += writer.startDocument('1.0', 'UTF-8');
     count += writer.startElementNS(undefined, 'root');
     count += writer.writeString('some text here');
     count += writer.endElement();
@@ -225,7 +225,7 @@ describe('xml textwriter', () => {
     // eslint-disable-next-line no-unused-vars
     let count;
 
-    count += writer.startDocument('1.0', 'utf8');
+    count += writer.startDocument('1.0', 'UTF-8');
     count += writer.startElementNS(undefined, 'root');
     count += writer.startCdata();
     count += writer.writeString('some text here');

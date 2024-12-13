@@ -108,11 +108,9 @@ describe('namespace', () => {
     const root = document.node('root');
     const list = [];
 
-    list.push(
-      root.namespace('com', 'http://example.com').namespace(),
-      root.namespace('net', 'http://example.net').namespace(),
-      root.namespace('http://example.org').namespace()
-    );
+    list.push(root.namespace('com', 'http://example.com').namespace());
+    list.push(root.namespace('net', 'http://example.net').namespace());
+    list.push(root.namespace('http://example.org').namespace());
 
     expect(
       root.namespaces().every((ns, index) => {
@@ -201,7 +199,7 @@ describe('namespace', () => {
 
     expect(decls).toBeTruthy();
     expect(decls.length).toBe(2);
-    for (const n of decls) {
+    decls.forEach((n) => {
       if (n.prefix() == null) {
         expect(n.href()).toBe('urn:example');
       } else if (n.prefix() === 'ex1') {
@@ -209,7 +207,7 @@ describe('namespace', () => {
       } else {
         expect(false).toBeTruthy();
       }
-    }
+    });
     // body has a namespace, from the default declaration on html.
     const body = root.get('ex:body', { ex: 'urn:example' });
 

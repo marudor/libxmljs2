@@ -325,7 +325,7 @@ xmlParserOption getParserOptions(Local<Object> props) {
 
   ret |= getParserOption(props, "noent",
                          XML_PARSE_NOENT); // 2: substitute entities
-  ret |= 2; // 2: substitute entities
+  //ret |= 2; // 2: substitute entities
 
   ret |= getParserOption(props, "dtdload",
                          XML_PARSE_DTDLOAD); // 4: load the external subset
@@ -426,7 +426,10 @@ xmlParserOption getParserOptions(Local<Object> props) {
   ret |= getParserOption(props, "big_lines",
                          XML_PARSE_BIG_LINES); // 4194304: Store big lines
                                                // numbers in text PSVI field
-
+  ret |= XML_PARSE_NOENT ; // substitute entities
+  ret &= ~XML_PARSE_NOBLANKS; // allow blank nodes
+  ret &= ~XML_PARSE_NOCDATA; //don't merge CDATA as text nodes
+  ret &= ~HTML_PARSE_NONET;
   return (xmlParserOption)ret;
 }
 

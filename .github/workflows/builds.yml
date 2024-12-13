@@ -9,66 +9,89 @@ on:
       - main
 
 jobs:
+  build-old:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2019, macos-10.15, ubuntu-18.04]
+        node: [12, 14, 16, 17]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@master
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm i -g pnpm
+      - run: pnpm i --frozen-lockfile
+        env:
+          npm_config_build_from_source: true
+      - run: pnpm lint
+      - run: pnpm tsd
+      - run: pnpm test
+      - run: pnpm package
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.os }}-${{ matrix.node }}-binary
+          path: 'build/**/*.tar.gz'
   build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2019, macos-12, ubuntu-20.04]
-        node: [18, 20, 21, 22]
+        os: [windows-2019, macos-10.15, ubuntu-20.04]
+        node: [18]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@master
         with:
           node-version: ${{ matrix.node }}
-      - run: corepack enable
+      - run: npm i -g pnpm
       - run: pnpm i --frozen-lockfile
         env:
           npm_config_build_from_source: true
+      - run: pnpm lint
       - run: pnpm tsd
       - run: pnpm test
-      - run: pnpm prebuild
-      - uses: actions/upload-artifact@v4
+      - run: pnpm package
+      - uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.os }}-${{ matrix.node }}-binary
-          path: 'prebuilds/**/*.tar.gz'
+          path: 'build/**/*.tar.gz'
   alpine:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-18.04
     strategy:
       matrix:
-        node: [18, 20, 21, 22]
+        node: [12, 14, 16, 17, 18]
       fail-fast: true
     container:
       image: node:${{ matrix.node }}-alpine
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
       - run: |
           apk add --no-cache python3 make g++
-      - run: corepack enable
+      - run: npm i -g pnpm
       - run: pnpm i --frozen-lockfile
         env:
           npm_config_build_from_source: true
+      - run: pnpm lint
       - run: pnpm tsd
+      - run: pnpm build
       - run: pnpm test
-      - run: pnpm prebuild
-      - uses: actions/upload-artifact@v4
+      - run: pnpm package
+      - uses: actions/upload-artifact@v2
         with:
           name: alpine-${{ matrix.node }}-binary
-          path: 'prebuilds/**/*.tar.gz'
+          path: 'build/**/*.tar.gz'
   deploy:
-    runs-on: ubuntu-20.04
-    needs: [alpine, build]
+    runs-on: ubuntu-18.04
+    needs: [alpine, build, build-old]
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@master
         with:
-          node-version: 20
-      - uses: actions/download-artifact@v4
+          node-version: 16
+      - uses: actions/download-artifact@v2
         with:
-          path: prebuilds
+          path: build
       - id: vars
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
       - uses: eine/tip@master
@@ -76,4 +99,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ steps.vars.outputs.tag }}
           files: |
-            ./prebuilds/**/*.tar.gz
+            ./build/*/stage/marudor/libxmljs2/releases/download/*/*

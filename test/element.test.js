@@ -181,7 +181,7 @@ describe('element', () => {
     const node = doc.get('node');
     const attrs = node.attrs();
 
-    for (const attr of attrs) {
+    attrs.forEach((attr) => {
       const name = attr.name();
       const ns = attr.namespace();
 
@@ -192,7 +192,7 @@ describe('element', () => {
         expect('attr-without-ns').toBe(name);
         expect(null).toBe(ns);
       }
-    }
+    });
   });
 
   it('replace', () => {

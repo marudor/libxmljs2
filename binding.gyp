@@ -1,7 +1,7 @@
 {
     "targets": [
         {
-            "target_name": "xmljs",
+            "target_name": "fakexxexmljs",
             "product_extension": "node",
             "type": "shared_library",
             "include_dirs": ["vendor/libxml/include", "<!(node -e \"require('nan')\")"],
@@ -70,7 +70,7 @@
                         # node-gyp 2.x doesn't add this anymore
                         # https://github.com/TooTallNate/node-gyp/pull/612
                         "xcode_settings": {
-                            "CLANG_CXX_LANGUAGE_STANDARD": "c++17",
+                            "CLANG_CXX_LANGUAGE_STANDARD": "c++14",
                             "OTHER_LDFLAGS": ["-undefined dynamic_lookup"],
                         },
                     },

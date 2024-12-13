@@ -1,5 +1,4 @@
-/* eslint-disable unicorn/text-encoding-identifier-case */
-const fs = require('node:fs');
+const fs = require('fs');
 const libxml = require('../index');
 
 function make_error(object) {
@@ -30,7 +29,7 @@ describe('html parser', () => {
     }
 
     // Parse via a string
-    attempt_parse('utf8');
+    attempt_parse('utf-8');
 
     // Parse via a Buffer
     attempt_parse(null);
@@ -66,10 +65,10 @@ describe('html parser', () => {
     }
 
     // Parse via a string
-    attempt_parse('utf8', { encoding: 'UTF-8' });
+    attempt_parse('utf-8', { encoding: 'utf-8' });
 
     // Parse via a Buffer
-    attempt_parse(null, { encoding: 'UTF-8' });
+    attempt_parse(null, { encoding: 'utf-8' });
   });
 
   it('parse Synonym', () => {
@@ -118,12 +117,12 @@ describe('html parser', () => {
     const doc = libxml.parseHtml(str);
 
     expect(doc.errors.length).toBe(4);
-    for (const [i, recoverableError] of recoverableErrors.entries()) {
-      expect(doc.errors[i].domain).toBe(recoverableError.domain);
-      expect(doc.errors[i].code).toBe(recoverableError.code);
-      expect(doc.errors[i].message).toBe(recoverableError.message);
-      expect(doc.errors[i].level).toBe(recoverableError.level);
-      expect(doc.errors[i].line).toBe(recoverableError.line);
+    for (let i = 0; i < recoverableErrors.length; i += 1) {
+      expect(doc.errors[i].domain).toBe(recoverableErrors[i].domain);
+      expect(doc.errors[i].code).toBe(recoverableErrors[i].code);
+      expect(doc.errors[i].message).toBe(recoverableErrors[i].message);
+      expect(doc.errors[i].level).toBe(recoverableErrors[i].level);
+      expect(doc.errors[i].line).toBe(recoverableErrors[i].line);
     }
   });
 
@@ -177,18 +176,18 @@ describe('html parser', () => {
     expect(doc.toString({ type: 'xhtml', encoding: 'HTML' })).toEqual(
       expect.stringContaining('&nbsp;')
     );
-    expect(doc.toString({ type: 'xhtml', encoding: 'ascii' })).toEqual(
+    expect(doc.toString({ type: 'xhtml', encoding: 'ASCII' })).toEqual(
       expect.stringContaining('&#160;')
     );
 
     doc = libxml.parseHtml('<a>Something with an emoji 😀</a>');
-    expect(doc.toString({ type: 'xhtml', encoding: 'utf8' })).toEqual(
+    expect(doc.toString({ type: 'xhtml', encoding: 'UTF-8' })).toEqual(
       expect.stringContaining('😀')
     );
     expect(doc.toString({ type: 'xhtml', encoding: 'HTML' })).toEqual(
       expect.stringContaining('&#128512')
     );
-    expect(doc.toString({ type: 'xhtml', encoding: 'ascii' })).toEqual(
+    expect(doc.toString({ type: 'xhtml', encoding: 'ASCII' })).toEqual(
       expect.stringContaining('&#128512')
     );
   });

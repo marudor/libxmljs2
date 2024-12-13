@@ -22,15 +22,13 @@ describe('traversal', () => {
     const doc = new libxml.Document();
     const root = doc.node('root');
 
-    children.push(
-      root.node('child'),
-      root.node('sibling1'),
-      root.node('sibling2')
-    );
+    children.push(root.node('child'));
+    children.push(root.node('sibling1'));
+    children.push(root.node('sibling2'));
 
     expect(doc.childNodes().length).toBe(children.length);
-    for (const [i, child] of children.entries()) {
-      expect(doc.child(i)).toBe(child);
+    for (let i = 0; i < children.length; i += 1) {
+      expect(doc.child(i)).toBe(children[i]);
     }
   });
 
@@ -39,11 +37,9 @@ describe('traversal', () => {
     const doc = new libxml.Document();
     const root = doc.node('root');
 
-    children.push(
-      root.node('prevSibling'),
-      root.node('child'),
-      root.node('nextSibling')
-    );
+    children.push(root.node('prevSibling'));
+    children.push(root.node('child'));
+    children.push(root.node('nextSibling'));
     expect(children[1].prevSibling()).toBe(children[0]);
     expect(children[1].nextSibling()).toBe(children[2]);
     expect(children[0].prevSibling()).toBe(null);
@@ -80,8 +76,8 @@ describe('traversal', () => {
 
     // childNodes
     expect(doc.childNodes().length).toBe(3);
-    for (const [i, child_] of children.entries()) {
-      expect(doc.child(i).name()).toBe(child_);
+    for (let i = 0; i < children.length; i += 1) {
+      expect(doc.child(i).name()).toBe(children[i]);
     }
 
     // check prev/next sibling
