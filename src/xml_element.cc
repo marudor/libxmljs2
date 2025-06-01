@@ -24,7 +24,7 @@ NAN_METHOD(XmlElement::New) {
   // if we were created for an existing xml node, then we don't need
   // to create a new node on the document
   if (info.Length() == 0) {
-    return info.GetReturnValue().Set(info.Holder());
+    return info.GetReturnValue().Set(info.This());
   }
 
   XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(
@@ -51,19 +51,19 @@ NAN_METHOD(XmlElement::New) {
 
   XmlElement *element = new XmlElement(elem);
   elem->_private = element;
-  element->Wrap(info.Holder());
+  element->Wrap(info.This());
 
   // this prevents the document from going away
-  Nan::Set(info.Holder(), Nan::New<String>("document").ToLocalChecked(),
+  Nan::Set(info.This(), Nan::New<String>("document").ToLocalChecked(),
            info[0])
       .Check();
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(XmlElement::Name) {
   Nan::HandleScope scope;
-  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.Holder());
+  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.This());
   assert(element);
 
   if (info.Length() == 0)
@@ -71,12 +71,12 @@ NAN_METHOD(XmlElement::Name) {
 
   Nan::Utf8String name(Nan::To<String>(info[0]).ToLocalChecked());
   element->set_name(*name);
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(XmlElement::Attr) {
   Nan::HandleScope scope;
-  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.Holder());
+  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.This());
   assert(element);
 
   // getter
@@ -90,19 +90,19 @@ NAN_METHOD(XmlElement::Attr) {
   Nan::Utf8String value(info[1]);
   element->set_attr(*name, *value);
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(XmlElement::Attrs) {
   Nan::HandleScope scope;
-  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.Holder());
+  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.This());
   assert(element);
 
   return info.GetReturnValue().Set(element->get_attrs());
 }
 
 NAN_METHOD(XmlElement::AddChild) {
-  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.Holder());
+  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.This());
   assert(element);
 
   XmlNode *child = Nan::ObjectWrap::Unwrap<XmlNode>(
@@ -127,12 +127,12 @@ NAN_METHOD(XmlElement::AddChild) {
     static_cast<XmlNode *>(imported_child->_private)->ref_wrapped_ancestor();
   }
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(XmlElement::AddCData) {
   Nan::HandleScope scope;
-  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.Holder());
+  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.This());
   assert(element);
 
   Local<Value> contentOpt;
@@ -147,12 +147,12 @@ NAN_METHOD(XmlElement::AddCData) {
                        xmlStrlen((const xmlChar *)content));
 
   element->add_cdata(elem);
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(XmlElement::Find) {
   Nan::HandleScope scope;
-  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.Holder());
+  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.This());
   assert(element);
 
   Nan::Utf8String xpath(info[0]);
@@ -184,7 +184,7 @@ NAN_METHOD(XmlElement::Find) {
 
 NAN_METHOD(XmlElement::NextElement) {
   Nan::HandleScope scope;
-  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.Holder());
+  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.This());
   assert(element);
 
   return info.GetReturnValue().Set(element->get_next_element());
@@ -192,7 +192,7 @@ NAN_METHOD(XmlElement::NextElement) {
 
 NAN_METHOD(XmlElement::PrevElement) {
   Nan::HandleScope scope;
-  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.Holder());
+  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.This());
   assert(element);
 
   return info.GetReturnValue().Set(element->get_prev_element());
@@ -200,7 +200,7 @@ NAN_METHOD(XmlElement::PrevElement) {
 
 NAN_METHOD(XmlElement::Text) {
   Nan::HandleScope scope;
-  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.Holder());
+  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.This());
   assert(element);
 
   if (info.Length() == 0) {
@@ -209,12 +209,12 @@ NAN_METHOD(XmlElement::Text) {
     element->set_content(*Nan::Utf8String(info[0]));
   }
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(XmlElement::Child) {
   Nan::HandleScope scope;
-  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.Holder());
+  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.This());
   assert(element);
 
   if (info.Length() != 1 || !info[0]->IsInt32()) {
@@ -227,7 +227,7 @@ NAN_METHOD(XmlElement::Child) {
 
 NAN_METHOD(XmlElement::ChildNodes) {
   Nan::HandleScope scope;
-  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.Holder());
+  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.This());
   assert(element);
 
   if (info[0]->IsInt32())
@@ -239,14 +239,14 @@ NAN_METHOD(XmlElement::ChildNodes) {
 
 NAN_METHOD(XmlElement::Path) {
   Nan::HandleScope scope;
-  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.Holder());
+  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.This());
   assert(element);
 
   return info.GetReturnValue().Set(element->get_path());
 }
 
 NAN_METHOD(XmlElement::AddPrevSibling) {
-  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.Holder());
+  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.This());
   assert(element);
 
   XmlNode *new_sibling = Nan::ObjectWrap::Unwrap<XmlNode>(
@@ -269,7 +269,7 @@ NAN_METHOD(XmlElement::AddPrevSibling) {
 }
 
 NAN_METHOD(XmlElement::AddNextSibling) {
-  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.Holder());
+  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.This());
   assert(element);
 
   XmlNode *new_sibling = Nan::ObjectWrap::Unwrap<XmlNode>(
@@ -292,7 +292,7 @@ NAN_METHOD(XmlElement::AddNextSibling) {
 }
 
 NAN_METHOD(XmlElement::Replace) {
-  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.Holder());
+  XmlElement *element = Nan::ObjectWrap::Unwrap<XmlElement>(info.This());
   assert(element);
 
   if (info[0]->IsString()) {

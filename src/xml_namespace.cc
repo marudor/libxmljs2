@@ -17,7 +17,7 @@ NAN_METHOD(XmlNamespace::New) {
 
   // created for an already existing namespace
   if (info.Length() == 0) {
-    return info.GetReturnValue().Set(info.Holder());
+    return info.GetReturnValue().Set(info.This());
   }
 
   // TODO(sprsquish): ensure this is an actual Node object
@@ -44,9 +44,9 @@ NAN_METHOD(XmlNamespace::New) {
   delete href;
 
   XmlNamespace *namesp = new XmlNamespace(ns);
-  namesp->Wrap(info.Holder());
+  namesp->Wrap(info.This());
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 Local<Object> XmlNamespace::New(xmlNs *node) {
@@ -110,14 +110,14 @@ XmlNamespace::~XmlNamespace() {
 
 NAN_METHOD(XmlNamespace::Href) {
   Nan::HandleScope scope;
-  XmlNamespace *ns = Nan::ObjectWrap::Unwrap<XmlNamespace>(info.Holder());
+  XmlNamespace *ns = Nan::ObjectWrap::Unwrap<XmlNamespace>(info.This());
   assert(ns);
   return info.GetReturnValue().Set(ns->get_href());
 }
 
 NAN_METHOD(XmlNamespace::Prefix) {
   Nan::HandleScope scope;
-  XmlNamespace *ns = Nan::ObjectWrap::Unwrap<XmlNamespace>(info.Holder());
+  XmlNamespace *ns = Nan::ObjectWrap::Unwrap<XmlNamespace>(info.This());
   assert(ns);
   return info.GetReturnValue().Set(ns->get_prefix());
 }

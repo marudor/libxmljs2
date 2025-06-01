@@ -9,7 +9,7 @@ Nan::Persistent<FunctionTemplate> XmlAttribute::constructor_template;
 NAN_METHOD(XmlAttribute::New) {
   Nan::HandleScope scope;
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 Local<Object> XmlAttribute::New(xmlNode *xml_obj, const xmlChar *name,
@@ -50,7 +50,7 @@ Local<Object> XmlAttribute::New(xmlAttr *attr) {
 
 NAN_METHOD(XmlAttribute::Name) {
   Nan::HandleScope scope;
-  XmlAttribute *attr = Nan::ObjectWrap::Unwrap<XmlAttribute>(info.Holder());
+  XmlAttribute *attr = Nan::ObjectWrap::Unwrap<XmlAttribute>(info.This());
   assert(attr);
 
   return info.GetReturnValue().Set(attr->get_name());
@@ -58,13 +58,13 @@ NAN_METHOD(XmlAttribute::Name) {
 
 NAN_METHOD(XmlAttribute::Value) {
   Nan::HandleScope scope;
-  XmlAttribute *attr = Nan::ObjectWrap::Unwrap<XmlAttribute>(info.Holder());
+  XmlAttribute *attr = Nan::ObjectWrap::Unwrap<XmlAttribute>(info.This());
   assert(attr);
 
   // attr.value('new value');
   if (info.Length() > 0) {
     attr->set_value(*Nan::Utf8String(info[0]));
-    return info.GetReturnValue().Set(info.Holder());
+    return info.GetReturnValue().Set(info.This());
   }
 
   // attr.value();
@@ -73,7 +73,7 @@ NAN_METHOD(XmlAttribute::Value) {
 
 NAN_METHOD(XmlAttribute::Node) {
   Nan::HandleScope scope;
-  XmlAttribute *attr = Nan::ObjectWrap::Unwrap<XmlAttribute>(info.Holder());
+  XmlAttribute *attr = Nan::ObjectWrap::Unwrap<XmlAttribute>(info.This());
   assert(attr);
 
   return info.GetReturnValue().Set(attr->get_element());
@@ -81,7 +81,7 @@ NAN_METHOD(XmlAttribute::Node) {
 
 NAN_METHOD(XmlAttribute::Namespace) {
   Nan::HandleScope scope;
-  XmlAttribute *attr = Nan::ObjectWrap::Unwrap<XmlAttribute>(info.Holder());
+  XmlAttribute *attr = Nan::ObjectWrap::Unwrap<XmlAttribute>(info.This());
   assert(attr);
 
   return info.GetReturnValue().Set(attr->get_namespace());

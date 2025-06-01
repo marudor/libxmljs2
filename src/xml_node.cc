@@ -21,7 +21,7 @@ Nan::Persistent<FunctionTemplate> XmlNode::constructor_template;
 
 NAN_METHOD(XmlNode::Doc) {
   Nan::HandleScope scope;
-  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.Holder());
+  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.This());
   assert(node);
 
   return info.GetReturnValue().Set(node->get_doc());
@@ -29,7 +29,7 @@ NAN_METHOD(XmlNode::Doc) {
 
 NAN_METHOD(XmlNode::Namespace) {
   Nan::HandleScope scope;
-  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.Holder());
+  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.This());
   assert(node);
 
   // #namespace() Get the node's namespace
@@ -64,7 +64,7 @@ NAN_METHOD(XmlNode::Namespace) {
   if (!ns) {
     const unsigned int argc = 3;
     Local<Value> argv[argc];
-    argv[0] = info.Holder();
+    argv[0] = info.This();
 
     if (info.Length() == 1) {
       argv[1] = Nan::Null();
@@ -88,12 +88,12 @@ NAN_METHOD(XmlNode::Namespace) {
   }
 
   node->set_namespace(ns->xml_obj);
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(XmlNode::Namespaces) {
   Nan::HandleScope scope;
-  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.Holder());
+  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.This());
   assert(node);
 
   // ignore everything but a literal true; different from IsFalse
@@ -106,7 +106,7 @@ NAN_METHOD(XmlNode::Namespaces) {
 
 NAN_METHOD(XmlNode::Parent) {
   Nan::HandleScope scope;
-  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.Holder());
+  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.This());
   assert(node);
 
   return info.GetReturnValue().Set(node->get_parent());
@@ -114,7 +114,7 @@ NAN_METHOD(XmlNode::Parent) {
 
 NAN_METHOD(XmlNode::PrevSibling) {
   Nan::HandleScope scope;
-  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.Holder());
+  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.This());
   assert(node);
 
   return info.GetReturnValue().Set(node->get_prev_sibling());
@@ -122,7 +122,7 @@ NAN_METHOD(XmlNode::PrevSibling) {
 
 NAN_METHOD(XmlNode::NextSibling) {
   Nan::HandleScope scope;
-  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.Holder());
+  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.This());
   assert(node);
 
   return info.GetReturnValue().Set(node->get_next_sibling());
@@ -130,7 +130,7 @@ NAN_METHOD(XmlNode::NextSibling) {
 
 NAN_METHOD(XmlNode::LineNumber) {
   Nan::HandleScope scope;
-  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.Holder());
+  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.This());
   assert(node);
 
   return info.GetReturnValue().Set(node->get_line_number());
@@ -138,7 +138,7 @@ NAN_METHOD(XmlNode::LineNumber) {
 
 NAN_METHOD(XmlNode::Type) {
   Nan::HandleScope scope;
-  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.Holder());
+  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.This());
   assert(node);
 
   return info.GetReturnValue().Set(node->get_type());
@@ -146,7 +146,7 @@ NAN_METHOD(XmlNode::Type) {
 
 NAN_METHOD(XmlNode::ToString) {
   Nan::HandleScope scope;
-  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.Holder());
+  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.This());
   assert(node);
 
   int options = 0;
@@ -221,17 +221,17 @@ NAN_METHOD(XmlNode::ToString) {
 
 NAN_METHOD(XmlNode::Remove) {
   Nan::HandleScope scope;
-  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.Holder());
+  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.This());
   assert(node);
 
   node->remove();
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(XmlNode::Clone) {
   Nan::HandleScope scope;
-  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.Holder());
+  XmlNode *node = Nan::ObjectWrap::Unwrap<XmlNode>(info.This());
   assert(node);
 
   bool recurse = true;

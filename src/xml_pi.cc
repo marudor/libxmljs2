@@ -24,7 +24,7 @@ NAN_METHOD(XmlProcessingInstruction::New) {
   // if we were created for an existing xml node, then we don't need
   // to create a new node on the document
   if (info.Length() == 0) {
-    return info.GetReturnValue().Set(info.Holder());
+    return info.GetReturnValue().Set(info.This());
   }
 
   DOCUMENT_ARG_CHECK
@@ -54,20 +54,20 @@ NAN_METHOD(XmlProcessingInstruction::New) {
   XmlProcessingInstruction *processing_instruction =
       new XmlProcessingInstruction(pi);
   pi->_private = processing_instruction;
-  processing_instruction->Wrap(info.Holder());
+  processing_instruction->Wrap(info.This());
 
   // this prevents the document from going away
-  Nan::Set(info.Holder(), Nan::New<String>("document").ToLocalChecked(),
+  Nan::Set(info.This(), Nan::New<String>("document").ToLocalChecked(),
            info[0])
       .Check();
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(XmlProcessingInstruction::Name) {
   Nan::HandleScope scope;
   XmlProcessingInstruction *processing_instruction =
-      Nan::ObjectWrap::Unwrap<XmlProcessingInstruction>(info.Holder());
+      Nan::ObjectWrap::Unwrap<XmlProcessingInstruction>(info.This());
   assert(processing_instruction);
 
   if (info.Length() == 0)
@@ -75,13 +75,13 @@ NAN_METHOD(XmlProcessingInstruction::Name) {
 
   Nan::Utf8String name(Nan::To<String>(info[0]).ToLocalChecked());
   processing_instruction->set_name(*name);
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(XmlProcessingInstruction::Text) {
   Nan::HandleScope scope;
   XmlProcessingInstruction *processing_instruction =
-      Nan::ObjectWrap::Unwrap<XmlProcessingInstruction>(info.Holder());
+      Nan::ObjectWrap::Unwrap<XmlProcessingInstruction>(info.This());
   assert(processing_instruction);
 
   if (info.Length() == 0) {
@@ -90,7 +90,7 @@ NAN_METHOD(XmlProcessingInstruction::Text) {
     processing_instruction->set_content(*Nan::Utf8String(info[0]));
   }
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 void XmlProcessingInstruction::set_name(const char *name) {
