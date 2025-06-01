@@ -29,16 +29,16 @@ XmlTextWriter::~XmlTextWriter() {
 NAN_METHOD(XmlTextWriter::NewTextWriter) {
   Nan::HandleScope scope;
   XmlTextWriter *writer = new XmlTextWriter();
-  writer->Wrap(info.Holder());
+  writer->Wrap(info.This());
   writer->OpenMemory(info);
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(XmlTextWriter::OpenMemory) {
   Nan::HandleScope scope;
 
-  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.Holder());
+  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.This());
 
   writer->writerBuffer = xmlBufferCreate();
   if (!writer->writerBuffer) {
@@ -57,7 +57,7 @@ NAN_METHOD(XmlTextWriter::OpenMemory) {
 NAN_METHOD(XmlTextWriter::BufferContent) {
   Nan::HandleScope scope;
 
-  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.Holder());
+  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.This());
 
   // Flush the output buffer of the libxml writer instance in order to push all
   // the content to our writerBuffer.
@@ -82,7 +82,7 @@ void XmlTextWriter::clearBuffer() {
 NAN_METHOD(XmlTextWriter::BufferEmpty) {
   Nan::HandleScope scope;
 
-  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.Holder());
+  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.This());
 
   writer->clearBuffer();
 
@@ -92,7 +92,7 @@ NAN_METHOD(XmlTextWriter::BufferEmpty) {
 NAN_METHOD(XmlTextWriter::StartDocument) {
   Nan::HandleScope scope;
 
-  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.Holder());
+  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.This());
 
   Nan::Utf8String version(info[0]);
   Nan::Utf8String encoding(info[1]);
@@ -118,7 +118,7 @@ NAN_METHOD(XmlTextWriter::StartDocument) {
 NAN_METHOD(XmlTextWriter::EndDocument) {
   Nan::HandleScope scope;
 
-  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.Holder());
+  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.This());
 
   int result = xmlTextWriterEndDocument(writer->textWriter);
 
@@ -130,7 +130,7 @@ NAN_METHOD(XmlTextWriter::EndDocument) {
 NAN_METHOD(XmlTextWriter::StartElementNS) {
   Nan::HandleScope scope;
 
-  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.Holder());
+  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.This());
 
   Nan::Utf8String prefix(info[0]);
   Nan::Utf8String name(info[1]);
@@ -150,7 +150,7 @@ NAN_METHOD(XmlTextWriter::StartElementNS) {
 NAN_METHOD(XmlTextWriter::EndElement) {
   Nan::HandleScope scope;
 
-  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.Holder());
+  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.This());
 
   int result = xmlTextWriterEndElement(writer->textWriter);
 
@@ -162,7 +162,7 @@ NAN_METHOD(XmlTextWriter::EndElement) {
 NAN_METHOD(XmlTextWriter::StartAttributeNS) {
   Nan::HandleScope scope;
 
-  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.Holder());
+  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.This());
 
   Nan::Utf8String prefix(info[0]);
   Nan::Utf8String name(info[1]);
@@ -182,7 +182,7 @@ NAN_METHOD(XmlTextWriter::StartAttributeNS) {
 NAN_METHOD(XmlTextWriter::EndAttribute) {
   Nan::HandleScope scope;
 
-  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.Holder());
+  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.This());
 
   int result = xmlTextWriterEndAttribute(writer->textWriter);
 
@@ -194,7 +194,7 @@ NAN_METHOD(XmlTextWriter::EndAttribute) {
 NAN_METHOD(XmlTextWriter::StartCdata) {
   Nan::HandleScope scope;
 
-  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.Holder());
+  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.This());
 
   int result = xmlTextWriterStartCDATA(writer->textWriter);
 
@@ -206,7 +206,7 @@ NAN_METHOD(XmlTextWriter::StartCdata) {
 NAN_METHOD(XmlTextWriter::EndCdata) {
   Nan::HandleScope scope;
 
-  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.Holder());
+  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.This());
 
   int result = xmlTextWriterEndCDATA(writer->textWriter);
 
@@ -218,7 +218,7 @@ NAN_METHOD(XmlTextWriter::EndCdata) {
 NAN_METHOD(XmlTextWriter::StartComment) {
   Nan::HandleScope scope;
 
-  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.Holder());
+  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.This());
 
   int result = xmlTextWriterStartComment(writer->textWriter);
 
@@ -230,7 +230,7 @@ NAN_METHOD(XmlTextWriter::StartComment) {
 NAN_METHOD(XmlTextWriter::EndComment) {
   Nan::HandleScope scope;
 
-  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.Holder());
+  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.This());
 
   int result = xmlTextWriterEndComment(writer->textWriter);
 
@@ -242,7 +242,7 @@ NAN_METHOD(XmlTextWriter::EndComment) {
 NAN_METHOD(XmlTextWriter::WriteString) {
   Nan::HandleScope scope;
 
-  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.Holder());
+  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.This());
 
   Nan::Utf8String string(info[0]);
 
@@ -256,7 +256,7 @@ NAN_METHOD(XmlTextWriter::WriteString) {
 
 NAN_METHOD(XmlTextWriter::OutputMemory) {
   bool clear = info.Length() == 0 || Nan::To<bool>(info[0]).FromMaybe(true);
-  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.Holder());
+  XmlTextWriter *writer = Nan::ObjectWrap::Unwrap<XmlTextWriter>(info.This());
 
   BufferContent(info);
 

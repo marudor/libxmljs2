@@ -23,7 +23,7 @@ NAN_METHOD(XmlComment::New) {
   // if we were created for an existing xml node, then we don't need
   // to create a new node on the document
   if (info.Length() == 0) {
-    return info.GetReturnValue().Set(info.Holder());
+    return info.GetReturnValue().Set(info.This());
   }
 
   DOCUMENT_ARG_CHECK
@@ -42,19 +42,19 @@ NAN_METHOD(XmlComment::New) {
 
   XmlComment *comment = new XmlComment(comm);
   comm->_private = comment;
-  comment->Wrap(info.Holder());
+  comment->Wrap(info.This());
 
   // this prevents the document from going away
-  Nan::Set(info.Holder(), Nan::New<String>("document").ToLocalChecked(),
+  Nan::Set(info.This(), Nan::New<String>("document").ToLocalChecked(),
            info[0])
       .Check();
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(XmlComment::Text) {
   Nan::HandleScope scope;
-  XmlComment *comment = Nan::ObjectWrap::Unwrap<XmlComment>(info.Holder());
+  XmlComment *comment = Nan::ObjectWrap::Unwrap<XmlComment>(info.This());
   assert(comment);
 
   if (info.Length() == 0) {
@@ -63,7 +63,7 @@ NAN_METHOD(XmlComment::Text) {
     comment->set_content(*Nan::Utf8String(info[0]));
   }
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 void XmlComment::set_content(const char *content) {

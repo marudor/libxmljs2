@@ -83,18 +83,18 @@ void XmlSaxParser::releaseContext() {
 NAN_METHOD(XmlSaxParser::NewParser) {
   Nan::HandleScope scope;
   XmlSaxParser *parser = new XmlSaxParser();
-  parser->Wrap(info.Holder());
+  parser->Wrap(info.This());
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(XmlSaxParser::NewPushParser) {
   Nan::HandleScope scope;
   XmlSaxParser *parser = new XmlSaxParser();
   parser->initialize_push_parser();
-  parser->Wrap(info.Holder());
+  parser->Wrap(info.This());
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 void XmlSaxParser::Callback(const char *what, int argc, Local<Value> argv[]) {
@@ -125,7 +125,7 @@ NAN_METHOD(XmlSaxParser::Push) {
   LIBXMLJS_ARGUMENT_TYPE_CHECK(info[0], IsString,
                                "Bad Argument: parseString requires a string");
 
-  XmlSaxParser *parser = Nan::ObjectWrap::Unwrap<XmlSaxParser>(info.Holder());
+  XmlSaxParser *parser = Nan::ObjectWrap::Unwrap<XmlSaxParser>(info.This());
 
   Nan::Utf8String parsable(Nan::To<String>(info[0]).ToLocalChecked());
 
@@ -154,7 +154,7 @@ NAN_METHOD(XmlSaxParser::ParseString) {
   LIBXMLJS_ARGUMENT_TYPE_CHECK(info[0], IsString,
                                "Bad Argument: parseString requires a string");
 
-  XmlSaxParser *parser = Nan::ObjectWrap::Unwrap<XmlSaxParser>(info.Holder());
+  XmlSaxParser *parser = Nan::ObjectWrap::Unwrap<XmlSaxParser>(info.This());
 
   Nan::Utf8String parsable(info[0]);
   parser->parse_string(*parsable, parsable.length());

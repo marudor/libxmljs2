@@ -28,7 +28,7 @@ Nan::Persistent<FunctionTemplate> XmlDocument::constructor_template;
 
 NAN_METHOD(XmlDocument::Encoding) {
   Nan::HandleScope scope;
-  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.Holder());
+  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.This());
   assert(document);
 
   // if no args, get the encoding
@@ -46,7 +46,7 @@ NAN_METHOD(XmlDocument::Encoding) {
   // set the encoding otherwise
   Nan::Utf8String encoding(info[0]);
   document->setEncoding(*encoding);
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 void XmlDocument::setEncoding(const char *encoding) {
@@ -59,7 +59,7 @@ void XmlDocument::setEncoding(const char *encoding) {
 
 NAN_METHOD(XmlDocument::Version) {
   Nan::HandleScope scope;
-  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.Holder());
+  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.This());
   assert(document);
 
   if (document->xml_obj->version)
@@ -73,7 +73,7 @@ NAN_METHOD(XmlDocument::Version) {
 
 NAN_METHOD(XmlDocument::Root) {
   Nan::HandleScope scope;
-  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.Holder());
+  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.This());
   assert(document);
 
   xmlNode *root = xmlDocGetRootElement(document->xml_obj);
@@ -101,7 +101,7 @@ NAN_METHOD(XmlDocument::Root) {
 
 NAN_METHOD(XmlDocument::GetDtd) {
   Nan::HandleScope scope;
-  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.Holder());
+  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.This());
   assert(document);
 
   xmlDtdPtr dtd = xmlGetIntSubset(document->xml_obj);
@@ -143,7 +143,7 @@ NAN_METHOD(XmlDocument::GetDtd) {
 NAN_METHOD(XmlDocument::SetDtd) {
   Nan::HandleScope scope;
 
-  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.Holder());
+  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.This());
   assert(document);
 
   Nan::Utf8String name(info[0]);
@@ -174,13 +174,13 @@ NAN_METHOD(XmlDocument::SetDtd) {
   xmlCreateIntSubset(document->xml_obj, (const xmlChar *)*name,
                      (const xmlChar *)extId, (const xmlChar *)sysId);
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(XmlDocument::ToString) {
   Nan::HandleScope scope;
 
-  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.Holder());
+  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.This());
   assert(document);
 
   int options = 0;
@@ -600,7 +600,7 @@ NAN_METHOD(XmlDocument::Validate) {
   xmlSetStructuredErrorFunc(reinterpret_cast<void *>(&errors),
                             XmlSyntaxError::PushToArray);
 
-  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.Holder());
+  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.This());
   XmlDocument *documentSchema = Nan::ObjectWrap::Unwrap<XmlDocument>(
       Nan::To<Object>(info[0]).ToLocalChecked());
 
@@ -621,7 +621,7 @@ NAN_METHOD(XmlDocument::Validate) {
   bool valid = xmlSchemaValidateDoc(valid_ctxt, document->xml_obj) == 0;
 
   xmlSetStructuredErrorFunc(NULL, NULL);
-  Nan::Set(info.Holder(), Nan::New<String>("validationErrors").ToLocalChecked(),
+  Nan::Set(info.This(), Nan::New<String>("validationErrors").ToLocalChecked(),
            errors)
       .Check();
 
@@ -651,7 +651,7 @@ NAN_METHOD(XmlDocument::RngValidate) {
   xmlSetStructuredErrorFunc(reinterpret_cast<void *>(&errors),
                             XmlSyntaxError::PushToArray);
 
-  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.Holder());
+  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.This());
   XmlDocument *documentSchema = Nan::ObjectWrap::Unwrap<XmlDocument>(
       Nan::To<Object>(info[0]).ToLocalChecked());
 
@@ -675,7 +675,7 @@ NAN_METHOD(XmlDocument::RngValidate) {
   bool valid = xmlRelaxNGValidateDoc(valid_ctxt, document->xml_obj) == 0;
 
   xmlSetStructuredErrorFunc(NULL, NULL);
-  Nan::Set(info.Holder(), Nan::New<String>("validationErrors").ToLocalChecked(),
+  Nan::Set(info.This(), Nan::New<String>("validationErrors").ToLocalChecked(),
            errors)
       .Check();
 
@@ -703,7 +703,7 @@ NAN_METHOD(XmlDocument::SchematronValidate) {
   Local<Array> errors = Nan::New<Array>();
   xmlResetLastError();
 
-  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.Holder());
+  XmlDocument *document = Nan::ObjectWrap::Unwrap<XmlDocument>(info.This());
   XmlDocument *documentSchema = Nan::ObjectWrap::Unwrap<XmlDocument>(
       Nan::To<Object>(info[0]).ToLocalChecked());
 
@@ -731,7 +731,7 @@ NAN_METHOD(XmlDocument::SchematronValidate) {
   bool valid = xmlSchematronValidateDoc(valid_ctxt, document->xml_obj) == 0;
 
   xmlSchematronSetValidStructuredErrors(valid_ctxt, NULL, NULL);
-  Nan::Set(info.Holder(), Nan::New<String>("validationErrors").ToLocalChecked(),
+  Nan::Set(info.This(), Nan::New<String>("validationErrors").ToLocalChecked(),
            errors)
       .Check();
 
@@ -758,9 +758,9 @@ NAN_METHOD(XmlDocument::New) {
 
   XmlDocument *document = new XmlDocument(doc);
   document->setEncoding(encoding);
-  document->Wrap(info.Holder());
+  document->Wrap(info.This());
 
-  return info.GetReturnValue().Set(info.Holder());
+  return info.GetReturnValue().Set(info.This());
 }
 
 XmlDocument::XmlDocument(xmlDoc *doc) : xml_obj(doc) {
